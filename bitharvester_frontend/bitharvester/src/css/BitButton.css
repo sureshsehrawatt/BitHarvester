@@ -1,0 +1,16 @@
+.bitButton {
+  background-color: var(--neon-color);
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  background: linear-gradient(90deg, #EC5C1A, #F6CE61);
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+  transition: background-color 0.5s ease; 
+}
+
+.bitButton:hover {
+  background: linear-gradient(90deg, #ec5c1a9e, #f6ce61a4);
+}

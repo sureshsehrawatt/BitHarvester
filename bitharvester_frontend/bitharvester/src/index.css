@@ -1,0 +1,770 @@
+:root {
+  /* --primary-color: #4CAF50;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c; */
+  --neon-color: #2272ff;
+  --black-color: #1d1d1d;
+}
+
+body {
+  background-color: var(--black-color);
+  cursor: none;
+  font-family: "Public Sans", sans-serif;
+}
+
+/* *******************************  Fonts Section  ************************************ */
+
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,700");
+
+@font-face {
+  font-family: groteskFont;
+  src: url(./assets/fonts/CabinetGrotesk-Regular.ttf);
+}
+
+.groteskFont {
+  font-family: groteskFont;
+}
+
+@font-face {
+  font-family: groteskFontBold;
+  src: url(./assets/fonts/CabinetGrotesk-Extrabold.ttf);
+}
+
+.groteskFontBold {
+  font-family: groteskFontBold;
+}
+
+/* *******************************  Cursor Section  ************************************ */
+
+.custom-dot {
+  width: 10px;
+  height: 10px;
+  background-color: white;
+}
+.custom-outline,
+.grow-outline {
+  width: 45px;
+  height: 45px;
+  border: 2px solid hsla(0, 0%, 100%, 0.5);
+  transition: width 0.5s, height 0.5s;
+}
+
+.grow-outline {
+  width: 100px;
+  height: 100px;
+}
+
+.custom-dot,
+.custom-outline {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* *******************************  Logo Section  ************************************ */
+
+.rotateAnimation {
+  animation: rotate 1.3s linear infinite;
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(-0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+/* *******************************  NavBar Section  ************************************ */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 2%;
+}
+
+.getButton {
+  margin-top: 0px;
+  font-size: 16px;
+}
+
+/* *******************************  Hero Section  ************************************ */
+.heroTextDiv {
+  margin-top: 5%;
+  height: 76vh;
+}
+
+.h1Div,
+.h2Div {
+  color: white;
+  font-size: 140px;
+  font-family: groteskFontBold;
+  font-weight: 900;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.h1Div {
+  margin-bottom: -40px;
+}
+
+.spanDiv {
+  color: #ff5733;
+  margin-right: 20px;
+}
+
+.pDiv {
+  color: white;
+  margin: 0px;
+  margin-top: -20px;
+  padding: 0px;
+  font-size: 50px;
+  font-family: fantasy;
+  display: flex;
+  justify-content: center;
+}
+
+/* *******************************  Details Section  ************************************ */
+
+.detailsSection {
+  height: 100vh;
+}
+
+.detailsSectionTitle1Div {
+  color: #ff5733;
+  font-size: 50px;
+  margin: 0px;
+  padding-top: 5%;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: 00;
+  display: flex;
+  justify-content: center;
+}
+
+.detailsSectionP1Div {
+  color: white;
+  font-size: 17px;
+  padding-inline: 10%;
+  font-family: monospace;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
+}
+
+/* *******************************  Scroll Section  ************************************ */
+
+.scroll-section-outer {
+  overflow: hidden;
+}
+
+.scroll-section-inner {
+  height: 100vh;
+  width: 500vw;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.scroll-section {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainPageSpan {
+  font-family: groteskFontBold;
+}
+
+.pg1,
+.pg2,
+.pg3,
+.pg4 {
+  height: 100vh;
+  width: 100vw;
+}
+
+.pageParentDiv {
+  display: flex;
+  text-align: center;
+  color: white;
+}
+
+.mainPageH1,
+.pageFirstDiv,
+.pageSecondDiv {
+  width: 50vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pageFirstDiv h1 {
+  margin-inline: 10%;
+  margin-top: 10%;
+  font-size: 60px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.pageFirstDiv p {
+  margin-inline: 10%;
+  font-size: 30px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+/* *******************************  Q Section  ************************************ */
+
+.Q {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qH1 {
+  color: white;
+  font-size: 60px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+.qP {
+  color: white;
+  font-size: 35px;
+  padding-inline: 8%;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.qSpan {
+  background-color: yellow;
+  color: #1d1d1d;
+}
+
+.qSpan2 {
+  background-color: #ff5733;
+}
+
+/* *******************************  ContactUs Section  ************************************ */
+
+.contactUs {
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.usH1 {
+  margin: 0px;
+  font-size: 90px;
+  font-family: groteskFontBold;
+}
+
+.form-container {
+  padding: 80px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.usForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.usInput,
+.usTextarea {
+  width: 40vw;
+  height: 7vh;
+  font-size: 20px;
+  font-family: "Courier New", Courier, monospace;
+  padding-inline: 10px;
+  border-radius: 4px;
+  position: relative;
+  background-color: white;
+  transition: 0.3s all;
+}
+
+.usTextarea {
+  height: 100%;
+}
+
+.input:hover {
+  background-color: rgba(255, 255, 255, 0.856);
+}
+
+.submit {
+  width: 100%;
+  height: 56px;
+  font-size: 20px;
+}
+
+/* *******************************  footer Section  ************************************ */
+
+.footer {
+  width: 100vw;
+  height: 50vh;
+  color: white;
+  font-family: "Raleway", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.footerAside {
+  margin: 1vw 0 1vw 65vw;
+  text-align: right;
+  margin-right: 30px;
+}
+
+.footerH2 {
+  color: #ff5733;
+  font-size: 4vw;
+  margin: -1vw 1vw;
+}
+
+.footerH3 {
+  margin: 0.5vw 1vw 1vw 0;
+  font-weight: 400;
+  font-size: 1.35vw;
+  text-transform: uppercase;
+}
+
+.footerF {
+  border: 0.1rem #fffbfb solid;
+  border-left: 0;
+  border-right: 0;
+  text-align: center;
+  font-size: 1.3vw;
+  margin: 1vw 1.2vw;
+}
+
+.footerCells {
+  display: inline-block;
+  border-right: 0.5vh #ffffff solid;
+  text-align: center;
+  padding: 0vw 0.5vw;
+  margin: 0.5vw;
+}
+
+.footer a {
+  color: #ff5733;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #2272ff;
+}
+/* *******************************  SignIn Section  ************************************ */
+
+.signInUp {
+  width: 100vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signInUpLogo {
+  width: fit-content;
+  margin: 0px;
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
+.signIn {
+  width: 40vw;
+  color: #ffffff;
+}
+
+.signInUpTitle {
+  margin: 0px;
+  font-size: 80px;
+  font-family: groteskFontBold;
+  display: flex;
+  justify-content: center;
+}
+
+.signInUpFormContainer {
+  padding: 50px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.signInUpForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.signInUpInput {
+  height: 7vh;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  padding-inline: 15px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  position: relative;
+  background-color: white;
+  transition: 0.3s all;
+}
+
+.signInUpInput:hover {
+  background-color: rgba(255, 255, 255, 0.856);
+}
+
+.signInUpBottom {
+  margin: 0px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.signInUpNavLink,
+.signInUpP {
+  text-decoration: none;
+  color: #ffffff;
+  margin: 0px;
+  font-size: 20px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.signInUpNavLink:hover {
+  color: #ff5733;
+}
+
+.formErrorDiv {
+  color: red;
+}
+
+/* *******************************  Particles Section  ************************************ */
+
+#tsparticles {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+/* *******************************  Dashboard Section  ************************************ */
+
+.bitDashboard {
+  width: 100vw;
+  height: 100vh;
+  color: #ffffff;
+  background-color: #161c24;
+  display: flex;
+}
+
+.bitDashboardOutlet {
+  width: 80vw;
+  height: 100%;
+}
+
+/* *******************************  Sidebar Section  ************************************ */
+
+.sidebar {
+  width: 20vw;
+  height: 100%;
+  border-right: 0.5px dashed grey;
+  /* font-family: "Public Sans", sans-serif; */
+}
+
+.sidebarLogo {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ff5733;
+}
+
+.sidebarItems {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebarItemDiv,
+.sidebarItemsProfile {
+  width: 270px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 4px;
+  color: grey;
+}
+
+.sidebarItemDiv:hover,
+.sidebarItemsProfileInner:hover {
+  background-color: rgba(128, 128, 128, 0.206);
+}
+
+.sidebarItemIcon {
+  margin: 0px;
+  margin-inline: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebarItemText {
+  font-size: 16px;
+}
+
+.sidebarItemsProfile {
+  width: 100%;
+  height: 20%;
+}
+
+.sidebarItemsProfileInner {
+  margin: 0;
+  margin-left: 40px;
+  border-radius: 8px;
+  padding-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: grey;
+}
+
+.sidebarItemsProfileText {
+  margin-left: 10px;
+}
+
+/* *******************************  FutreOutlet Section  ************************************ */
+
+.futreOutlet {
+  /* width: 80%;
+  height: 100%; */
+}
+
+/* *******************************  BitNavbar Section  ************************************ */
+
+.bitNavbar {
+  width: 100%;
+  height: 50px;
+  background-color: rgba(22, 28, 36, 0.8);
+  position: fixed;
+}
+
+/* *******************************  uploadCode Section  ************************************ */
+
+.uploadCode {
+  width: 80vw;
+  height: 100vh;
+}
+
+.uploadCodeFirst {
+  width: 80vw;
+  height: 80vh;
+  display: flex;
+}
+
+.uploadCodeFileDropDiv,
+.uploadCodeTextPaste,
+.uploadCodeP {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.uploadCodeFileDropDiv {
+  width: 30%;
+}
+
+.uploadCodeFileDrop {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* font-family: "Public Sans", sans-serif; */
+  border: 2px dashed grey;
+  color: lightgrey;
+}
+
+.uploadCodeTextPaste {
+  width: 70%;
+}
+
+.uploadCodeP {
+  color: grey;
+}
+
+.uploadCodeButtonDiv {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.uploadCodeButton {
+  width: 100px;
+  height: 40px;
+  margin-right: 100px;
+}
+
+.uploadCodeTextarea {
+  width: 90%;
+  height: 90%;
+  font-size: 16px;
+  /* font-family: "Public Sans", sans-serif; */
+  margin: 20px;
+  padding: 20px;
+  border-radius: 4px;
+  position: relative;
+  color: whitesmoke;
+  background-color: rgba(128, 128, 128, 0.206);
+  transition: 0.3s all;
+}
+
+/* *******************************  Profile Section  ************************************ */
+
+.profile {
+  width: 100%;
+  height: 100%;
+}
+
+.profileFirstDiv {
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 100px;
+  margin-top: 60px;
+  padding: 50px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.profilePhotoDiv {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profileChangePhotoButton {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.profileChangePhotoButton:hover {
+  color: #2272ff;
+}
+
+.profileFormContainer {
+  width: 100%;
+}
+
+.profileInputsDiv {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.profileButtonsDiv {
+  margin-inline: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileButtonsFirstDiv {
+  display: flex;
+}
+
+.profileButtonsFirstDivItem1,
+.customBitButton {
+  width: 100px;
+  height: 40px;
+  margin-right: 30px;
+}
+
+.customBitButton {
+  width: 100px;
+  height: 40px;
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  background: linear-gradient(90deg, #0e5422, #8ef661);
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+  transition: background-color 0.5s ease;
+}
+
+.customBitButton:hover {
+  background: linear-gradient(90deg, #0e542277, #8ef66179);
+}
+
+.customBitButtonSignUp {
+  background: linear-gradient(90deg, #ec5c1a, #f6ce61);
+}
+
+.customBitButtonSignUp:hover {
+  background: linear-gradient(90deg, #ec5c1a9e, #f6ce61a4);
+}
+
+.profileImg {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+}
+
+/* *******************************  About Section  ************************************ */
+
+.about {
+  color: white;
+}
+
+/* *******************************  Privacy Policy Section  ************************************ */
+.privacyPolicy {
+  color: white;
+}
+
+/* *******************************  Home Section  ************************************ */
+.homeNavDiv {
+  margin-inline: 40px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
