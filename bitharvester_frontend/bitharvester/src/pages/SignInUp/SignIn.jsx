@@ -1,11 +1,15 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Particle from "../../components/Assets/Particle";
 import Logo from "../../components/Assets/logo";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { backendBaseUrl } from "../../conf/config";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -15,8 +19,22 @@ const SignIn = () => {
       password: Yup.string().min(8, "Password should be at least 8 characters").required("Password is required"),
       email: Yup.string().email("Invalid email address").required("Email is required"),
     }),
-    onSubmit: (values) => {
-      console.log(values); // Handle form submission
+    onSubmit: async (user, { resetForm }) => {
+      // preventDefault();
+      const URL = `${backendBaseUrl}/api/user/signin`;
+      try {
+        const response = await axios.post(URL, user);
+        console.log("User signin successfully");
+        console.log(response)
+        window.localStorage.setItem('userId', response.data);
+        resetForm();
+        navigate('/bitdashboard');
+      } catch (error) {
+        console.error(
+          "Error while signin :",
+          error.response ? error.response.data : error.message
+        );
+      }
     },
   });
 

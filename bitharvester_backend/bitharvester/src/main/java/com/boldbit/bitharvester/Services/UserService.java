@@ -8,4 +8,5 @@ import com.boldbit.bitharvester.Models.User;
 public interface UserService {
     User createUser(User user);
     User getByEmail(String email);
+    User getById(String id);
 }

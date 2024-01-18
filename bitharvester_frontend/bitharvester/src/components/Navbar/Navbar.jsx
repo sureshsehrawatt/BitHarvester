@@ -4,7 +4,7 @@ import BitButton from "../Assets/BitButton.jsx";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const handleClick = (e) => {
+  const handleClick = () => {
     console.log("Get started button clicked");
   };
 
@@ -23,7 +23,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// import { useNavigate } from 'react-router-dom'
-// const navigate = useNavigate()
-// <BitButton label="Get started" onClick={() => navigate('/bitdashboard')} /> 

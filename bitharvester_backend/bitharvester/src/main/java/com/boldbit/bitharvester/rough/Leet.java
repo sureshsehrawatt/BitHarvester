@@ -1,16 +1,16 @@
 package com.boldbit.bitharvester.rough;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
 public class Leet {
 
-    public static boolean uniqueOccurrences(int[] arr) {
-        Map<Integer, Integer> count = new HashMap<>();
-        for(int i : arr)
-            count.merge(i, 1, Integer::sum);
-        return new HashSet<>(count.values()).size() == count.size();
+    public static int climbStairs(int n) {
+        int curr=1, pre=1, temp=0;
+        for(int i=1; i<n; i++){ 
+            temp = curr;
+            curr = pre + curr;
+            pre = temp;
+        }
+        return curr;
+
 
         // List<Integer> list = new ArrayList<>();
         // Set<Integer> occurrences = new HashSet<>();
@@ -68,7 +68,7 @@ public class Leet {
     }
 
     public static void main(String[] args) {
-        int[]arr = {1,2,2,1,1,3};
-        Leet.uniqueOccurrences(arr);
+        int n = 3;
+        Leet.climbStairs(n);
     }
 }

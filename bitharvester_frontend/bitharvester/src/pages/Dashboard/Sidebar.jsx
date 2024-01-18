@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   GridViewRounded,
@@ -6,8 +6,31 @@ import {
   UploadRounded,
   PersonRounded,
 } from "@mui/icons-material";
+import { backendBaseUrl } from "../../conf/config";
+import axios from "axios";
 
 const Sidebar = () => {
+  const[userName, setUserName] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, []); 
+
+  async function fetchData() {
+    const URL = `${backendBaseUrl}/api/user/${localStorage.getItem("userId")}`;
+    try {
+      const response = await axios.get(URL);
+      console.log(response)
+      console.log(response.data.fullname)
+      setUserName(response.data.fullname);
+    } catch (error) {
+      console.error(
+        "Error while data fetching :",
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
+
   const navLinkStyles = ({ isActive }) => {
     return {
       color: isActive ? "#5be49b" : "",
@@ -46,7 +69,7 @@ const Sidebar = () => {
           style={navLinkStyles}
         >
           <PersonRounded sx={{ fontSize: 60 }} />
-          <p className="sidebarItemsProfileText">Demo Singh</p>
+          <p className="sidebarItemsProfileText">{!userName ? "Demo Singh" : userName}</p>
         </NavLink>
       </div>
     </div>

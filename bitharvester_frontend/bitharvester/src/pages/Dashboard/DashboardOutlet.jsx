@@ -1,9 +1,9 @@
 import React from 'react'
 
-const FutreOutlet = () => {
+const DashboardOutlet = () => {
   return (
-    <div className='futreOutlet'>FutreOutlet</div>
+    <div className='futreOutlet'>DashboardOutlet</div>
   )
 }
 
-export default FutreOutlet
+export default DashboardOutlet

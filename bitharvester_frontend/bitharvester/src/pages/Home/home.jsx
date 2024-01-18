@@ -9,13 +9,16 @@ import BitButton from "../../components/Assets/BitButton.jsx";
 import { NavLink } from "react-router-dom";
 
 function Home() {
+  const handleClick = () => {
+    console.log();
+  };
   return (
     <div>
       <Particle />
       <div className="homeNavDiv">
         <Logo />
         <NavLink to="signin" className="getButton">
-          <BitButton label="Get started" onClick={{}} />
+          <BitButton label="Get started" onClick={handleClick} />
         </NavLink>
       </div>
       <HeroSection />

@@ -34,7 +34,7 @@ const SignUp = () => {
         resetForm();
       } catch (error) {
         console.error(
-          "Error registering user:",
+          "Error while registering user:",
           error.response ? error.response.data : error.message
         );
       }
