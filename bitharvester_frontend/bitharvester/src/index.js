@@ -5,6 +5,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
 } from "react-router-dom";
 import "./index.css";
 import App from "./pages/App";
@@ -21,22 +22,54 @@ import Settings from "./pages/Dashboard/Tabs/Settings";
 import Dummy from "./components/Demo/Dummy";
 import Profile from "./pages/Dashboard/Tabs/Profile";
 
+const isAuthenticated = !!localStorage.getItem("userId")
+
+const publicRoutes = [
+  { path: "/", element: <Home /> },
+  { path: "/aboutus", element: <About /> },
+  { path: "/privacypolicy", element: <PrivacyPolicy /> },
+  { path: "/signin", element: <SignIn /> },
+  { path: "/signup", element: <SignUp /> },
+];
+
+const authenticatedRoutes = [
+  {
+    path: "/bitdashboard/*",
+    element: isAuthenticated ? <BitDashboard /> : <Navigate to="/" />,
+    children: [
+      { index: true, element: <DashboardOutlet /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "uploadcode", element: <UploadCode /> },
+      { path: "settings", element: <Settings /> },
+      { path: "profile", element: <Profile /> },
+      { path: "dummy", element: <Dummy /> },
+    ],
+  },
+];
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route exact path="/" element={<App />}>
-      <Route exact path="" element={<Home />} />
-      <Route exact path="aboutus" element={<About />} />
-      <Route exact path="privacypolicy" element={<PrivacyPolicy />} />
-      <Route exact path="signin" element={<SignIn />} />
-      <Route exact path="signup" element={<SignUp />} />
-      <Route exact path="bitdashboard/*" element={<BitDashboard />}>
-        <Route exact index element={<DashboardOutlet />} />
-        <Route exact path="dashboard" element={<Dashboard />} />
-        <Route exact path="uploadcode" element={<UploadCode />} />
-        <Route exact path="settings" element={<Settings />} />
-        <Route exact path="profile" element={<Profile />} />
-        <Route exact path="dummy" element={<Dummy />} />
-      </Route>
+    <Route path="/" element={<App />}>
+      {publicRoutes.map(({ path, element }) => (
+        <Route
+          key={path}
+          path={path}
+          element={isAuthenticated ? <Navigate to="/bitdashboard" /> : element}
+        />
+      ))}
+
+      {authenticatedRoutes.map(({ path, element, children }) => (
+        <Route key={path} path={path} element={element}>
+          {children.map(({ index, path, element }) => (
+            <Route
+              key={path || "index"}
+              index={index}
+              path={path}
+              element={element}
+            />
+          ))}
+        </Route>
+      ))}
     </Route>
   )
 );

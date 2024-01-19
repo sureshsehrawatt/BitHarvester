@@ -20,8 +20,6 @@ const Sidebar = () => {
     const URL = `${backendBaseUrl}/api/user/${localStorage.getItem("userId")}`;
     try {
       const response = await axios.get(URL);
-      console.log(response)
-      console.log(response.data.fullname)
       setUserName(response.data.fullname);
     } catch (error) {
       console.error(

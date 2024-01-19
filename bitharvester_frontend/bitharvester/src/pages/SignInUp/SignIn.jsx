@@ -9,26 +9,29 @@ import { backendBaseUrl } from "../../conf/config";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
-      password: Yup.string().min(8, "Password should be at least 8 characters").required("Password is required"),
-      email: Yup.string().email("Invalid email address").required("Email is required"),
+      password: Yup.string()
+        .min(8, "Password should be at least 8 characters")
+        .required("Password is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
     }),
     onSubmit: async (user, { resetForm }) => {
       // preventDefault();
       const URL = `${backendBaseUrl}/api/user/signin`;
       try {
         const response = await axios.post(URL, user);
-        console.log("User signin successfully");
-        console.log(response)
-        window.localStorage.setItem('userId', response.data);
+        window.localStorage.setItem("userId", response.data);
         resetForm();
-        navigate('/bitdashboard');
+        navigate("/bitdashboard");
+        // window.location.reload();
       } catch (error) {
         console.error(
           "Error while signin :",
@@ -58,7 +61,9 @@ const SignIn = () => {
                   <input
                     type={field === "password" ? "password" : "text"}
                     name={field}
-                    placeholder={field === "email" ? "Email Address" : "***********"}
+                    placeholder={
+                      field === "email" ? "Email Address" : "***********"
+                    }
                     className="signInUpInput"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -72,7 +77,10 @@ const SignIn = () => {
               ))}
               <br />
               <div className="submit">
-                <button type="submit" className="customBitButton customBitButtonSignUp">
+                <button
+                  type="submit"
+                  className="customBitButton customBitButtonSignUp"
+                >
                   Sign In
                 </button>
               </div>
