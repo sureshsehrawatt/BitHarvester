@@ -13,6 +13,8 @@ import com.boldbit.bitharvester.Models.User;
 import com.boldbit.bitharvester.Services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -58,6 +60,18 @@ public class UserController {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("api/user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User user) {
+        try {
+            userService.updateUserById(id, user);
+            return new ResponseEntity<>("User updated", HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("User not updated", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
     public static String generateUserId() {
         long timestamp = System.currentTimeMillis();

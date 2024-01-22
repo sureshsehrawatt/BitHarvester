@@ -522,7 +522,8 @@ body {
 }
 
 .sidebarItemDiv:hover,
-.sidebarItemsProfileInner:hover {
+.sidebarItemsProfileInner:hover,
+.sidebarItemsSignout:hover {
   background-color: rgba(128, 128, 128, 0.206);
 }
 
@@ -541,13 +542,18 @@ body {
 .sidebarItemsProfile {
   width: 100%;
   height: 20%;
+  justify-content: space-evenly;
 }
 
-.sidebarItemsProfileInner {
+.sidebarItemsSignout {
+  padding: 10px;
+}
+
+.sidebarItemsProfileInner,
+.sidebarItemsSignout {
   margin: 0;
-  margin-left: 40px;
   border-radius: 8px;
-  padding-right: 15px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -652,7 +658,7 @@ body {
 
 .profile {
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
 .profileFirstDiv {

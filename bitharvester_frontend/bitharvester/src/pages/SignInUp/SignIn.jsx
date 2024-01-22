@@ -31,7 +31,7 @@ const SignIn = () => {
         window.localStorage.setItem("userId", response.data);
         resetForm();
         navigate("/bitdashboard");
-        // window.location.reload();
+        window.location.reload();
       } catch (error) {
         console.error(
           "Error while signin :",

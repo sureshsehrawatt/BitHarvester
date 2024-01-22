@@ -5,16 +5,18 @@ import {
   SettingsRounded,
   UploadRounded,
   PersonRounded,
+  LogoutRounded,
 } from "@mui/icons-material";
 import { backendBaseUrl } from "../../conf/config";
 import axios from "axios";
+import { red } from "@mui/material/colors";
 
 const Sidebar = () => {
-  const[userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     fetchData();
-  }, []); 
+  }, []);
 
   async function fetchData() {
     const URL = `${backendBaseUrl}/api/user/${localStorage.getItem("userId")}`;
@@ -29,12 +31,18 @@ const Sidebar = () => {
     }
   }
 
+  function signout() {
+    localStorage.clear();
+    window.location.reload();
+  }
+
   const navLinkStyles = ({ isActive }) => {
     return {
       color: isActive ? "#5be49b" : "",
       backgroundColor: isActive ? "#1A3230" : "",
     };
   };
+
   return (
     <div className="sidebar">
       <div className="sidebarLogo">BitHarvester</div>
@@ -61,13 +69,25 @@ const Sidebar = () => {
         />
       </div>
       <div className="sidebarItemsProfile">
+        <div>
+          <NavLink
+            to="/bitdashboard/profile"
+            className="sidebarItemsProfileInner"
+            style={navLinkStyles}
+          >
+            <PersonRounded sx={{ fontSize: 60 }} />
+            <p className="sidebarItemsProfileText">
+              {!userName ? "Demo Singh" : userName}
+            </p>
+          </NavLink>
+        </div>
         <NavLink
-          to="/bitdashboard/profile"
-          className="sidebarItemsProfileInner"
-          style={navLinkStyles}
+          to="/"
+          title="Sign out"
+          onClick={signout}
+          className="sidebarItemsSignout"
         >
-          <PersonRounded sx={{ fontSize: 60 }} />
-          <p className="sidebarItemsProfileText">{!userName ? "Demo Singh" : userName}</p>
+          <LogoutRounded sx={{ fontSize: 45, color: red[500] }} />
         </NavLink>
       </div>
     </div>
