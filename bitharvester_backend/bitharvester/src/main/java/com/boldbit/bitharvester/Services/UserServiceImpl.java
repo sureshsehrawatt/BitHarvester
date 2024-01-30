@@ -1,10 +1,7 @@
 package com.boldbit.bitharvester.Services;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.boldbit.bitharvester.Models.User;
 import com.boldbit.bitharvester.Repository.UserRepository;

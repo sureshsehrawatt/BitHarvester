@@ -1,36 +1,45 @@
 package com.boldbit.bitharvester.rough;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Stack;
 
 class Solution {
-    public static int[] findErrorNums(int[] nums) {
-        Arrays.sort(nums);
-        int[] dup = new int[2];
-        for (int i = 0; i < nums.length - 1; i++){
-            if (nums[i] == nums[i + 1]){
-                dup[0] = nums[i];
-                break;
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < tokens.length; i++) {
+            String token = tokens[i];
+            if (!(token == "+" || token == "-" || token == "*" || token == "/")) {
+                stack.push(Integer.parseInt(token));
+            } else {
+                int b = stack.pop();
+                int a = stack.pop();
+                switch (token) {
+                    case "+":
+                        stack.push(a + b);
+                        break;
+                    case "-":
+                        stack.push(a - b);
+                        break;
+                    case "*":
+                        stack.push(a * b);
+                        break;
+                    case "/":
+                        if (b != 0) {
+                            stack.push(a / b);
+                            break;
+                        } else {
+                            throw new ArithmeticException("Division by zero");
+                        }
+                    default:
+                        throw new IllegalArgumentException("Invalid operator: " + token);
+                }
             }
         }
-
-        for (int i = 0; i < nums.length; i++){
-            if (nums[i] != i+1){
-                dup[1] = i + 1;
-                // break;
-            }
-        }
-        if (dup[1] == 0)
-            dup[1] = nums.length;
-        return dup;
+        return stack.pop();
     }
 
     public static void main(String[] args) {
-        int[] nums = {3,2,3,4,6,5};
-        Solution.findErrorNums(nums);
+        Solution obj=new Solution();
+        String[] tokens = {"10","6","9","3","+","-11","*","/","*","17","+","5","+"};
+        obj.evalRPN(tokens);
     }
 }
