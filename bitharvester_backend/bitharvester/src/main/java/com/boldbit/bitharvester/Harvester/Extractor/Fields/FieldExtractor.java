@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FieldExtractor {
-    private final Map<String, Map<String, Map<String, String>>> variables = new HashMap<>();
+    private final Map<String, Map<String, Map<String, Map<String, String>>>> variables = new HashMap<>();
 
     public static void main(String[] args) {
         String filePath = "/Users/cavisson/Documents/Projects/bitharvester/bitharvester_backend/bitharvester/src/main/java/com/boldbit/bitharvester/Harvester/Extractor/Fields/Data/FieldsData.txt"; // Update with the actual file path
@@ -45,11 +45,13 @@ public class FieldExtractor {
                 if (flags.startsWith("0x")) {
                     flags = flags.substring(2); // Remove the "0x" prefix
                 }
-                Map<String, String> flagsMap = convertFlags(Integer.parseInt(flags, 16));
+
                 Map<String, String> data = new HashMap<>();
                 data.put("descriptor", descriptor);
-                data.put("flags", flagsMap.toString());
-                dataStore(type, name, data);
+                dataStore(type, name, "descriptor", data);
+
+                Map<String, String> flagsMap = convertFlags(Integer.parseInt(flags, 16));
+                dataStore(type, name, "flags", flagsMap);
             }
     
         }
@@ -57,8 +59,8 @@ public class FieldExtractor {
         convertToJson(variables);
     }    
 
-    private void dataStore(String type, String name, Map<String, String> data) {
-        variables.computeIfAbsent(type, k -> new HashMap<>()).put(name, data);
+    private void dataStore(String type, String name, String dataName, Map<String, String> data) {
+        variables.computeIfAbsent(type, k -> new HashMap<>()).computeIfAbsent(name, k -> new HashMap<>()).put(dataName, data);
     }
 
     public static final int ACC_PUBLIC = 0x0001;
@@ -100,12 +102,12 @@ public class FieldExtractor {
             }
         }
         if(map.isEmpty()){
-            map.put("0", "DEFAULT");
+            map.put("0", "Default");
         }
         return map;
     }   
     
-    public String convertToJson(Map<String, Map<String, Map<String, String>>> variables) throws JsonProcessingException {
+    public String convertToJson(Map<String, Map<String, Map<String, Map<String, String>>>> variables) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(variables);
         System.out.println(json);
