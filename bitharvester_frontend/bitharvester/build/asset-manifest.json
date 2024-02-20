@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/static/css/main.191583ea.css",
+    "main.js": "/static/js/main.b106a6d0.js",
+    "static/media/main.svg": "/static/media/main.48b8268a7e69cc129efa4da7abf4d046.svg",
+    "static/media/CabinetGrotesk-Regular.ttf": "/static/media/CabinetGrotesk-Regular.6a0bc5b857b1a7af3eea.ttf",
+    "static/media/CabinetGrotesk-Extrabold.ttf": "/static/media/CabinetGrotesk-Extrabold.9ec7766b97fa50aa8241.ttf",
+    "static/media/img1.svg": "/static/media/img1.0b0f84e7e22444166ae5fcf35fc60c22.svg",
+    "static/media/img2.svg": "/static/media/img2.91f0f6a846269f86d6fe8a7c7bcfbb8b.svg",
+    "static/media/img4.svg": "/static/media/img4.0e072147f250b9fc3759a1e0688a71f6.svg",
+    "static/media/img3.svg": "/static/media/img3.3fdcf813fc48ca03bcae4e99b4f12373.svg",
+    "index.html": "/index.html",
+    "main.191583ea.css.map": "/static/css/main.191583ea.css.map",
+    "main.b106a6d0.js.map": "/static/js/main.b106a6d0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.191583ea.css",
+    "static/js/main.b106a6d0.js"
+  ]
+}
