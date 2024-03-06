@@ -1,6 +1,6 @@
 package com.boldbit.bitharvester.rough;
 
-public class Demo {
+public final class Demo {
     public static int minSteps(String s, String t) {
             int[] charCount = new int[26]; // Assuming only lowercase letters
     
