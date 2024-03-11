@@ -1,6 +1,6 @@
 package com.boldbit.bitharvester.Harvester.compiler.token;
 
-public enum TokenType {
+/* public enum TokenType {
     // Keywords
     ABSTRACT,
     ASSERT,
@@ -93,12 +93,122 @@ public enum TokenType {
     LITERAL,
     IDENTIFIER,
     WHITESPACE,
+    REGULAR_EXPRESSION,
 
     // Comment
     MULTILINE_COMMENT,
-    SINGLE_LINE_COMMENT,
+    SINGLE_LINE_COMMENT, END_OF_FILE,
 
     
+} */
+
+public enum TokenType{
+    // Special Characters & Operators
+    OPEN_CURLY,
+    CLOSE_CURLY,
+    OPEN_PAREN,
+    CLOSE_PAREN,
+    OPEN_SQUARE,
+    CLOSE_SQUARE,
+    PERIOD,
+    COLON,
+    SEMI_COLON,
+    COMMA,
+    QUESTION_MARK,
+    BANG,
+    STAR,
+    PERCENT,
+    CARET,
+    SLASH,
+    AMPERSAND,
+    AND,
+    BAR,
+    OR,
+    POUND,
+    PLUS,
+    MINUS,
+    PLUS_EQUAL,
+    MINUS_EQUAL,
+    MINUS_MINUS,
+    PLUS_PLUS,
+    EQUAL,
+    EQUAL_EQUAL,
+    NOT_EQUAL,
+    LESS_EQUAL,
+    GREATER_EQUAL,
+    OPEN_ANGLE,
+    CLOSE_ANGLE,
+    LEFT_SHIFT,
+    RIGHT_SHIFT,
+    LEFT_SHIFT_EQUAL,
+    RIGHT_SHIFT_EQUAL,
+    UNSIGNED_RIGHT_SHIFT,
+    UNSIGNED_RIGHT_SHIFT_EQUAL,
+
+    // Data Types
+    BIGINT,
+
+    // other
+    NUMBER,
+
+    // EOF
+    END_OF_FILE, STRING_LITERAL,
+
+
+    // Keywords
+    ABSTRACT,
+    ASSERT,
+    BOOLEAN,
+    BREAK,
+    BYTE,
+    CASE,
+    CATCH,
+    CHAR,
+    CLASS,
+    CONST,
+    CONTINUE,
+    DEFAULT,
+    DO,
+    DOUBLE,
+    ELSE,
+    ENUM,
+    EXTENDS,
+    FINAL,
+    FINALLY,
+    FLOAT,
+    FOR,
+    GOTO,
+    IF,
+    IMPLEMENTS,
+    IMPORT,
+    INSTANCEOF,
+    INT,
+    INTERFACE,
+    LONG,
+    NATIVE,
+    NEW,
+    NULL,
+    PACKAGE,
+    PRIVATE,
+    PROTECTED,
+    PUBLIC,
+    RETURN,
+    SHORT,
+    STATIC,
+    STRICTFP,
+    SUPER,
+    SWITCH,
+    SYNCHRONIZED,
+    THIS,
+    THROW,
+    THROWS,
+    TRANSIENT,
+    TRY,
+    VOID,
+    VOLATILE,
+    WHILE,
+    N, IDENTIFIER, STRING;
+
 }
 
 class CheckTokenType {

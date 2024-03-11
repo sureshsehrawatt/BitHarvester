@@ -4,7 +4,7 @@ public class LiteralToken extends Token{
 
     public final String value;
 
-    public LiteralToken(TokenType tokenType, SourceRange location, String value) {
+    public LiteralToken(TokenType tokenType, String value, SourceRange location) {
         super(tokenType, location);
         this.value = value;
     }

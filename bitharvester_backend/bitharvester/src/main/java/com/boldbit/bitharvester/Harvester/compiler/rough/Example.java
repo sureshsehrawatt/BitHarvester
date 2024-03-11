@@ -1,5 +1,5 @@
 package com.boldbit.bitharvester.Harvester.compiler.rough;
-// import java.util.Arrays;
+import java.util.Arrays;
 
 public class Example extends A {
 // ajkdgfhagjdskas
