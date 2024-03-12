@@ -14,7 +14,7 @@ public class Runner {
             ProgramTree programTree = parser.parseProgram();
             System.out.println(programTree.toString());
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("Exception in parsing");
         }
     }
 }

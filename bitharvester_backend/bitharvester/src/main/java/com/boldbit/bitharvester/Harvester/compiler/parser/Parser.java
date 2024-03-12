@@ -7,11 +7,15 @@ import com.boldbit.bitharvester.Harvester.compiler.lexer.Scanner;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment.Type;
 import com.boldbit.bitharvester.Harvester.compiler.token.LiteralToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
+import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
+import com.boldbit.bitharvester.Harvester.compiler.token.Keywords;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
 import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
+import com.boldbit.bitharvester.Harvester.compiler.trees.ClassDeclarationTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.FieldDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ImportDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.PackageDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
@@ -71,32 +75,178 @@ public class Parser {
     private ParseTree parseElement() {
         if (peekPackageDeclaration()) {
             return parsePackageDeclaration();
-        }
-
-        if (peekImportDeclaration()) {
+        } else if (peekImportDeclaration()) {
             return parseImportDeclaration();
-        }
-
-        if (peekClassDeclaration()) {
+        } else {
             return parseClassDeclaration();
         }
-
-        return parseSourceElement();
     }
 
+    // class syntax
+    /*
+     * [access_modifier] class ClassName [extends SuperClassName] [implements
+     * Interface1, Interface2, ...] {
+     * 
+     * Class variables (fields)
+     * 
+     * Constructors
+     * 
+     * Methods
+     * }
+     */
     private ParseTree parseClassDeclaration() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseClassDeclaration'");
+        SourcePosition start = getTreeStartLocation();
+        ArrayList<Token> modifiersList = new ArrayList<>();
+        IdentifierToken className = null;
+        IdentifierToken superClass = null;
+
+        while (!peek(TokenType.CLASS) && !peek(TokenType.ENUM) && !peek(TokenType.INTERFACE)) {
+            modifiersList.add(peekToken());
+            eat(peekToken().tokenType);
+        }
+
+        if (peek(TokenType.CLASS)) {
+            eat(TokenType.CLASS);
+        }
+
+        if (peek(TokenType.IDENTIFIER)) {
+            className = (IdentifierToken) peekToken();
+            eat(TokenType.IDENTIFIER);
+        } else {
+            System.out.println("Unexpected token in class declaration");
+        }
+
+        if (peek(TokenType.EXTENDS)) {
+            eat(TokenType.EXTENDS);
+            if (peek(TokenType.IDENTIFIER)) {
+                superClass = (IdentifierToken) peekToken();
+                eat(TokenType.IDENTIFIER);
+            } else {
+                System.out.println("Unexpected token in super class declaration");
+            }
+        }
+
+        eat(TokenType.OPEN_CURLY);
+        ArrayList<ParseTree> elements = parseClassElements();
+        // eat(TokenType.CLOSE_CURLY);
+        return new ClassDeclarationTree(modifiersList, className, superClass, elements, getTreeLocation(start));
     }
 
-    private boolean peekClassDeclaration() {
-        return peek(TokenType.CLASS);
+    private ArrayList<ParseTree> parseClassElements() {
+        ArrayList<ParseTree> classElements = new ArrayList<>();
+        while (!peek(TokenType.CLOSE_CURLY)) {
+            Token token = peekToken();
+            if (token.tokenType == TokenType.SEMI_COLON) {
+                eat(TokenType.SEMI_COLON);
+                continue;
+            }
+            classElements.add(parseClassElement());
+        }
+        return classElements;
+    }
+
+    private ParseTree parseClassElement() {
+        SourcePosition start = getTreeStartLocation();
+        ArrayList<Token> modifiersList = new ArrayList<>();
+        Token type = null;
+        IdentifierToken name = null;
+        while (peekModifier()) {
+            modifiersList.add(peekToken());
+            eat(peekToken().tokenType);
+        }
+
+        // inner class
+        if (peek(TokenType.CLASS)) {
+            // FIXME - pass modifiersList of class
+            return parseClassDeclaration();
+        }
+        
+        // TODO - implement constructor parsing
+        // constructor
+        if (peek(TokenType.N)) {
+            return parseConstructorDeclaration();
+        }
+
+        // return type
+        if (peekIdOrKeyword()) {
+            type = eatIdOrKeywordAsId();
+        }
+        
+        // name
+        if (peek(TokenType.IDENTIFIER)) {
+            name = (IdentifierToken) peekToken();
+            eat(TokenType.IDENTIFIER);
+        }
+
+        // field
+        if(peek(TokenType.SEMI_COLON) || peekAssignmentOperator()){
+            return parseFieldDeclaration(modifiersList, type, name, start);
+        }
+
+        // method
+        if (peek(TokenType.OPEN_PAREN)) {
+            return parseMethodDeclaration();
+        }
+
+        return null;
+    }
+
+    
+
+    private ParseTree parseMethodDeclaration() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'parseMethodDeclaration'");
+    }
+
+    private ParseTree parseConstructorDeclaration() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'parseConstructorDeclaration'");
+    }
+
+    private ParseTree parseFieldDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name, SourcePosition start) {
+        Token value = null;
+        if(!peek(TokenType.SEMI_COLON)){
+            nextToken();
+            value = peekToken();
+            // TODO - fix this
+            eat(TokenType.IDENTIFIER);
+        }
+        eat(TokenType.SEMI_COLON);
+        return new FieldDeclarationTree(modifiersList, false, type, name, value, getTreeLocation(start));
+    }
+
+    private boolean peekAssignmentOperator() {
+        return TokenType.peekAssignmentOperator(peekToken().tokenType);
+    }
+
+    private IdentifierToken eatIdOrKeywordAsId() {
+        Token token = nextToken();
+        if (token.tokenType == TokenType.IDENTIFIER) {
+            return (IdentifierToken) token;
+        } else if (Keywords.isKeyword(token.tokenType)) {
+            return new IdentifierToken(Keywords.get(token.tokenType).toString(), token.location);
+        } else {
+            System.out.println("Excepetion in eatIdOrKeywordAsId");
+        }
+        return null;
+    }
+
+    private boolean peekIdOrKeyword() {
+        return peekIdOrKeyword(0);
+    }
+
+    private boolean peekIdOrKeyword(int index) {
+        TokenType type = peekType(index);
+        return TokenType.IDENTIFIER == type || Keywords.isKeyword(type);
+    }
+
+    private boolean peekModifier() {
+        return TokenType.peekModifier(peekToken().tokenType);
     }
 
     private ParseTree parseSourceElement() {
-        // TODO Auto-generated method stub
         System.out.println("Unimplemented method 'parseSourceElement'");
-        throw new UnsupportedOperationException("Unimplemented method 'parseSourceElement'");
+        return null;
     }
 
     private ParseTree parsePackageDeclaration() {
@@ -104,10 +254,7 @@ public class Parser {
         eat(TokenType.PACKAGE);
 
         while (!peek(TokenType.SEMI_COLON)) {
-            String packageName = "";
             if (peek(TokenType.IDENTIFIER)) {
-                // Token token = peekToken();
-                // packageName += token.location
                 eat(TokenType.IDENTIFIER);
             } else if (peek(TokenType.PERIOD)) {
                 eat(TokenType.PERIOD);

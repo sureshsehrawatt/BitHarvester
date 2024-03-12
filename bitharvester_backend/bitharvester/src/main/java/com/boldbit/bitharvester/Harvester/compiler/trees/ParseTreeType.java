@@ -42,5 +42,6 @@ public enum ParseTreeType {
     SUPER_EXPRESSION,
                                 FORMAL_PARAMETER_LIST,
     NULL,
-    IMPORT_DECLARATION,
+    IMPORT_DECLARATION, 
+    FIELD_DECLARATION,
 }

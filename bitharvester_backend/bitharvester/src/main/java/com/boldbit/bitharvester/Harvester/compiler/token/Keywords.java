@@ -74,4 +74,14 @@ public enum Keywords {
     public TokenType getTokenType() {
         return tokenType;
     }
+
+    public static boolean isKeyword(TokenType tokenType) {
+        if(contains(tokenType.toString()).tokenType != TokenType.N)
+            return true;
+        return false;
+    }
+
+    public static Keywords get(TokenType tokenType) {
+        return contains(tokenType.toString());
+    }
 }

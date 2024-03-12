@@ -1,7 +1,7 @@
-package com.boldbit.bitharvester.Harvester.compiler.rough;
-import java.util.Arrays;
-
 public class Example extends A {
+
+    public final String name = 6289;
+
 // ajkdgfhagjdskas
     String /*
     * MultiLine comment

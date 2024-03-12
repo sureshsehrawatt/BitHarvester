@@ -156,7 +156,6 @@ public enum TokenType{
 
 
     // Keywords
-    ABSTRACT,
     ASSERT,
     BOOLEAN,
     BREAK,
@@ -173,7 +172,6 @@ public enum TokenType{
     ELSE,
     ENUM,
     EXTENDS,
-    FINAL,
     FINALLY,
     FLOAT,
     FOR,
@@ -185,31 +183,72 @@ public enum TokenType{
     INT,
     INTERFACE,
     LONG,
-    NATIVE,
     NEW,
     NULL,
     PACKAGE,
-    PRIVATE,
-    PROTECTED,
-    PUBLIC,
     RETURN,
     SHORT,
-    STATIC,
-    STRICTFP,
     SUPER,
     SWITCH,
-    SYNCHRONIZED,
     THIS,
     THROW,
     THROWS,
-    TRANSIENT,
     TRY,
     VOID,
-    VOLATILE,
     WHILE,
-    N, IDENTIFIER, STRING;
+    IDENTIFIER, 
+    STRING,
+    
+    // Access Modifiers
+    PRIVATE,
+    PROTECTED,
+    PUBLIC,
+    
+    // Non-Access Modifiers:
+    ABSTRACT,
+    FINAL,
+    NATIVE,
+    STRICTFP,
+    SYNCHRONIZED,
+    STATIC,
+    TRANSIENT,
+    VOLATILE,
+    
+    
+    N, 
+    ;
 
+    public static boolean peekModifier(TokenType tokenType) {
+        return  tokenType == TokenType.PUBLIC ||
+                tokenType == TokenType.PRIVATE ||
+                tokenType == TokenType.PROTECTED ||
+                tokenType == TokenType.ABSTRACT ||
+                tokenType == TokenType.FINAL ||
+                tokenType == TokenType.NATIVE ||
+                tokenType == TokenType.STRICTFP ||
+                tokenType == TokenType.SYNCHRONIZED ||
+                tokenType == TokenType.STATIC ||
+                tokenType == TokenType.TRANSIENT ||
+                tokenType == TokenType.VOLATILE ||
+                false; // Return false if the current token is not a modifier
+    }
+
+    public static boolean peekAssignmentOperator(TokenType tokenType) {
+        switch (tokenType) {
+          case EQUAL:
+          case PLUS_EQUAL:
+          case MINUS_EQUAL:
+          case LEFT_SHIFT_EQUAL:
+          case RIGHT_SHIFT_EQUAL:
+          case UNSIGNED_RIGHT_SHIFT_EQUAL:
+            return true;
+          default:
+            return false;
+        }
+      }
 }
+
+
 
 class CheckTokenType {
     public String checkKeyword(String word) {
