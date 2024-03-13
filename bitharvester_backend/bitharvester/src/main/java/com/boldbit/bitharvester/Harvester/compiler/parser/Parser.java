@@ -1,11 +1,10 @@
 package com.boldbit.bitharvester.Harvester.compiler.parser;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 import com.boldbit.bitharvester.Harvester.compiler.lexer.Scanner;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment.Type;
-import com.boldbit.bitharvester.Harvester.compiler.token.LiteralToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
 import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Keywords;
@@ -14,10 +13,13 @@ import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
 import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
+import com.boldbit.bitharvester.Harvester.compiler.trees.BlockTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ClassDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.FieldDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ImportDeclarationTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.MethodDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.PackageDeclarationTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTreeType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ProgramTree;
@@ -26,9 +28,10 @@ public class Parser {
 
     Scanner scanner;
     SourcePosition lastSourcePosition;
+    CommentRecorder commentRecorder = new CommentRecorder();
 
     public Parser(SourceFile sourceFile) {
-        this.scanner = new Scanner(sourceFile, 0);
+        this.scanner = new Scanner(sourceFile, 0, commentRecorder);
         lastSourcePosition = scanner.getPosition();
     }
 
@@ -37,6 +40,8 @@ public class Parser {
         ArrayList<ParseTree> sourceElements = SourceElements();
 
         eat(TokenType.END_OF_FILE);
+        // FIXME - implement commentRecorder
+        // return new ProgramTree(sourceElements, commentRecorder.getComments(), getTreeLocation(start));
         return new ProgramTree(sourceElements, null, getTreeLocation(start));
 
     }
@@ -142,6 +147,7 @@ public class Parser {
             }
             classElements.add(parseClassElement());
         }
+        eat(TokenType.CLOSE_CURLY);
         return classElements;
     }
 
@@ -160,7 +166,7 @@ public class Parser {
             // FIXME - pass modifiersList of class
             return parseClassDeclaration();
         }
-        
+
         // TODO - implement constructor parsing
         // constructor
         if (peek(TokenType.N)) {
@@ -171,7 +177,7 @@ public class Parser {
         if (peekIdOrKeyword()) {
             type = eatIdOrKeywordAsId();
         }
-        
+
         // name
         if (peek(TokenType.IDENTIFIER)) {
             name = (IdentifierToken) peekToken();
@@ -179,23 +185,90 @@ public class Parser {
         }
 
         // field
-        if(peek(TokenType.SEMI_COLON) || peekAssignmentOperator()){
+        if (peek(TokenType.SEMI_COLON) || peekAssignmentOperator()) {
             return parseFieldDeclaration(modifiersList, type, name, start);
         }
 
         // method
         if (peek(TokenType.OPEN_PAREN)) {
-            return parseMethodDeclaration();
+            return parseMethodDeclaration(modifiersList, type, name, start);
         }
 
         return null;
     }
 
-    
+    private ParseTree parseMethodDeclaration(ArrayList<Token> modifiersList, Token returnType, IdentifierToken name,
+            SourcePosition start) {
 
-    private ParseTree parseMethodDeclaration() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseMethodDeclaration'");
+        eat(TokenType.OPEN_PAREN);
+        ArrayList<ParseTree> parameters = parseParameters();
+        eat(TokenType.CLOSE_PAREN);
+
+        BlockTree body = null;
+        if (peek(TokenType.OPEN_CURLY)) {
+            body = parseBlock();
+        } else {
+            System.out.println("Open curly not found");
+            // eat(TokenType.SEMI_COLON);
+        }
+
+        return new MethodDeclarationTree(modifiersList, false, returnType, name, parameters, body,
+                getTreeLocation(start));
+    }
+
+    private BlockTree parseBlock() {
+        // FIXME -
+        // {
+        // SourcePosition start = getTreeStartLocation();
+        // eat(TokenType.OPEN_CURLY);
+        // // Spec says Statement list. However functions are also embedded in the wild.
+        // ImmutableList<ParseTree> result = parseSourceElementList();
+        // eat(TokenType.CLOSE_CURLY);
+        // return new BlockTree(getTreeLocation(start), result);
+        // }
+
+        SourcePosition start = getTreeStartLocation();
+        eat(TokenType.OPEN_CURLY);
+        ArrayList<ParseTree> statements = new ArrayList<>();
+        Stack<TokenType> stack = new Stack<>();
+        stack.push(TokenType.OPEN_CURLY);
+
+        while (stack.size() != 0) {
+            TokenType tokenType = nextToken().tokenType;
+            if (tokenType == TokenType.OPEN_CURLY) {
+                stack.push(TokenType.OPEN_CURLY);
+            } else if (tokenType == TokenType.CLOSE_CURLY) {
+                stack.pop();
+            } 
+        }
+
+        // eat(TokenType.CLOSE_CURLY);
+
+        return new BlockTree(statements, getTreeLocation(start));
+    }
+
+    private ArrayList<ParseTree> parseParameters() {
+        ArrayList<ParseTree> parameters = new ArrayList<>();
+        while (!peek(TokenType.CLOSE_PAREN)) {
+            SourcePosition start = getTreeStartLocation();
+            if (!TokenType.peekType(peekToken().tokenType)) {
+                break;
+            }
+            Token type = peekToken();
+            nextToken();
+            if (!peek(TokenType.IDENTIFIER)) {
+                break;
+            }
+            IdentifierToken name = (IdentifierToken) eat(TokenType.IDENTIFIER);
+            // FIXME - implement ParameterDeclarationTree
+            parameters.add(new ParameterDeclarationTree(type, name, null, getTreeLocation(start)));
+            if (peek(TokenType.COMMA)) {
+                eat(TokenType.COMMA);
+            } else {
+                break;
+            }
+        }
+        return parameters;
     }
 
     private ParseTree parseConstructorDeclaration() {
@@ -203,9 +276,10 @@ public class Parser {
         throw new UnsupportedOperationException("Unimplemented method 'parseConstructorDeclaration'");
     }
 
-    private ParseTree parseFieldDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name, SourcePosition start) {
+    private ParseTree parseFieldDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name,
+            SourcePosition start) {
         Token value = null;
-        if(!peek(TokenType.SEMI_COLON)){
+        if (!peek(TokenType.SEMI_COLON)) {
             nextToken();
             value = peekToken();
             // TODO - fix this
@@ -317,7 +391,7 @@ public class Parser {
 
     class CommentRecorder implements Scanner.CommentRecorder {
 
-        List<Comment> comments;
+        ArrayList<Comment> comments = new ArrayList<>();
         private SourcePosition lastCommentEndPosition;
 
         @Override
@@ -329,7 +403,7 @@ public class Parser {
             }
         }
 
-        public List<Comment> getComments() {
+        public ArrayList<Comment> getComments() {
             return comments;
         }
 

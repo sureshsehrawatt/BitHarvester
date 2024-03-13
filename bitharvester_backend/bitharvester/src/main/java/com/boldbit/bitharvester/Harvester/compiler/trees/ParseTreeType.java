@@ -3,7 +3,7 @@ package com.boldbit.bitharvester.Harvester.compiler.trees;
 public enum ParseTreeType {
     PACKAGE_DECLARARTION,
     PROGRAM,
-    FUNCTION_DECLARATION,
+    METHOD_DECLARATION,
     BLOCK,
     VARIABLE_STATEMENT,
     VARIABLE_DECLARATION,
@@ -43,5 +43,6 @@ public enum ParseTreeType {
                                 FORMAL_PARAMETER_LIST,
     NULL,
     IMPORT_DECLARATION, 
-    FIELD_DECLARATION,
+    FIELD_DECLARATION, 
+    METHOD_PARAMETER_DECLARATION,
 }

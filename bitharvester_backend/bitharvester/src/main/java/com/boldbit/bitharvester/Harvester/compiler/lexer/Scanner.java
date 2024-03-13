@@ -26,13 +26,14 @@ public class Scanner {
     List<Token> tokensList = new ArrayList<>();
     private int typeParameterLevel;
 
-    public Scanner(SourceFile sourceFile, int offset) {
+    public Scanner(SourceFile sourceFile, int offset, CommentRecorder commentRecorder) {
         this.sourceFile = sourceFile;
         this.contents = sourceFile.contents;
         this.contentsLength = sourceFile.contents.length();
         this.index = offset;
         this.typeParameterLevel = 0;
         this.lineNumberScanner = new LineNumberScanner(sourceFile);
+        this.commentRecorder = commentRecorder;
     }
 
     public SourcePosition getPosition() {

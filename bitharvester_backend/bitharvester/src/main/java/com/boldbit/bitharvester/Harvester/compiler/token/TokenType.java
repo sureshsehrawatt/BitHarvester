@@ -157,12 +157,9 @@ public enum TokenType{
 
     // Keywords
     ASSERT,
-    BOOLEAN,
     BREAK,
-    BYTE,
     CASE,
     CATCH,
-    CHAR,
     CLASS,
     CONST,
     CONTINUE,
@@ -173,21 +170,17 @@ public enum TokenType{
     ENUM,
     EXTENDS,
     FINALLY,
-    FLOAT,
     FOR,
     GOTO,
     IF,
     IMPLEMENTS,
     IMPORT,
     INSTANCEOF,
-    INT,
     INTERFACE,
-    LONG,
     NEW,
     NULL,
     PACKAGE,
     RETURN,
-    SHORT,
     SUPER,
     SWITCH,
     THIS,
@@ -197,7 +190,6 @@ public enum TokenType{
     VOID,
     WHILE,
     IDENTIFIER, 
-    STRING,
     
     // Access Modifiers
     PRIVATE,
@@ -213,6 +205,16 @@ public enum TokenType{
     STATIC,
     TRANSIENT,
     VOLATILE,
+    
+    // type
+    BOOLEAN,
+    BYTE,
+    CHAR,
+    FLOAT,
+    INT,
+    LONG,
+    SHORT,
+    STRING,
     
     
     N, 
@@ -241,6 +243,22 @@ public enum TokenType{
           case LEFT_SHIFT_EQUAL:
           case RIGHT_SHIFT_EQUAL:
           case UNSIGNED_RIGHT_SHIFT_EQUAL:
+            return true;
+          default:
+            return false;
+        }
+      }
+    
+      public static boolean peekType(TokenType tokenType) {
+        switch (tokenType) {
+          case BOOLEAN:
+          case BYTE:
+          case CHAR:
+          case FLOAT:
+          case INT:
+          case LONG:
+          case SHORT:
+          case STRING:
             return true;
           default:
             return false;
