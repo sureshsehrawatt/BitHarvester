@@ -1,13 +1,11 @@
 package com.boldbit.bitharvester.Harvester.compiler.parser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.boldbit.bitharvester.Harvester.compiler.lexer.Scanner;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment.Type;
 import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
-// import com.boldbit.bitharvester.Harvester.compiler.token.Keywords;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
@@ -18,7 +16,6 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.ClassDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ExpressionStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ExpressionTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.IfStatementTree;
-// import com.boldbit.bitharvester.Harvester.compiler.trees.FieldDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ImportDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodSignatureTree;
@@ -27,6 +24,7 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTre
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTreeType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ProgramTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.VariableDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.WhileStatementTree;
 
 public class Parser {
@@ -92,6 +90,9 @@ public class Parser {
     private ParseTree classDeclaration(ArrayList<Token> modifiersList, SourcePosition start) {
         IdentifierToken className = null;
         IdentifierToken superClass = null;
+        ArrayList<ParseTree> variablesList = new ArrayList<>();
+        // TODO - 
+        ArrayList<ParseTree> methodsList = new ArrayList<>();
 
         if (peek(TokenType.CLASS)) {
             eat(TokenType.CLASS);
@@ -125,8 +126,7 @@ public class Parser {
 
         eat(TokenType.OPEN_CURLY);
 
-        // ArrayList<ParseTree> elements = parseClassElements();
-        ArrayList<ParseTree> classBody = classOrInterfaceBody(className, false);
+        ArrayList<ParseTree> classBody = classOrInterfaceBody(className, variablesList, false);
         return new ClassDeclarationTree(modifiersList, className, superClass, classBody, getTreeLocation(start));
 
     }
@@ -140,7 +140,7 @@ public class Parser {
         return modifiersList;
     }
 
-    private ArrayList<ParseTree> classOrInterfaceBody(IdentifierToken className, boolean isInterface) {
+    private ArrayList<ParseTree> classOrInterfaceBody(IdentifierToken className, ArrayList<ParseTree> variablesList, boolean isInterface) {
         ArrayList<ParseTree> classElements = new ArrayList<>();
         while (!peek(TokenType.CLOSE_CURLY)) {
             Token token = peekToken();
@@ -148,13 +148,19 @@ public class Parser {
                 eat(TokenType.SEMI_COLON);
                 continue;
             }
-            classElements.add(classOrInterfaceBodyDeclaration(className, isInterface));
+            ParseTree pt = classOrInterfaceBodyDeclaration(className, variablesList, isInterface);
+            if(pt == null && variablesList.size()>0){
+                classElements.addAll(variablesList);
+                variablesList.clear();
+            }else {
+                classElements.add(pt);
+            }
         }
         eat(TokenType.CLOSE_CURLY);
         return classElements;
     }
 
-    private ParseTree classOrInterfaceBodyDeclaration(IdentifierToken className, boolean isInterface) {
+    private ParseTree classOrInterfaceBodyDeclaration(IdentifierToken className, ArrayList<ParseTree> variablesList, boolean isInterface) {
         SourcePosition start = getTreeStartLocation();
         ArrayList<Token> modifiersList = new ArrayList<>();
         while (isModifier()) {
@@ -190,12 +196,59 @@ public class Parser {
         if (peek(TokenType.IDENTIFIER)) {
             name = (IdentifierToken) peekToken();
             eat(peekToken().tokenType);
-        } 
+        }
 
         if (peek(TokenType.OPEN_PAREN)) {
             return parseMethodDeclaration(modifiersList, type, name, isInterface, start);
         }
 
+        if (peek(TokenType.EQUAL) || peek(TokenType.SEMI_COLON)) {
+            return parseVariableDeclarations(modifiersList, type, name, variablesList, start);
+        }
+
+        return null;
+    }
+
+    private ParseTree parseVariableDeclarations(ArrayList<Token> modifiersList, Token type, IdentifierToken name, ArrayList<ParseTree> variablesList, SourcePosition start) {
+        return parseVariableDeclarationsRest(modifiersList, type, name, variablesList, start);
+    }
+
+    private ParseTree parseVariableDeclarationsRest(ArrayList<Token> modifiersList, Token type, IdentifierToken name, ArrayList<ParseTree> variablesList, SourcePosition start) {
+        variablesList.add(parseVariableDeclaration(modifiersList, type, name, start));
+        while (peek(TokenType.COMMA)) {
+            nextToken();
+            variablesList.add(parseVariableDeclarationRest(modifiersList, type, start));
+        }
+        return null;
+    }
+
+    private ParseTree parseVariableDeclarationRest(ArrayList<Token> modifiersList, Token type, SourcePosition start) {
+        IdentifierToken name = (IdentifierToken) peekToken();
+        eat(TokenType.IDENTIFIER);
+        return parseVariableDeclaration(modifiersList, type, name, start);
+    }
+
+    private ParseTree parseVariableDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name, SourcePosition start) {
+        // TODO - type
+        if(peek(TokenType.SEMI_COLON)){
+            eat(TokenType.SEMI_COLON);
+            return new VariableDeclarationTree(modifiersList, type, name, null, getTreeLocation(start));
+        }
+        
+        if(peek(TokenType.EQUAL)){
+            Token init = null;
+            eat(TokenType.EQUAL);
+            if(peek(TokenType.IDENTIFIER)){
+                init = peekToken();
+                eat(TokenType.IDENTIFIER);
+                return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
+            } else if (peek(TokenType.NUMBER)){
+                init = peekToken();
+                eat(TokenType.NUMBER);
+                return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
+            }
+            return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
+        }
         return null;
     }
 

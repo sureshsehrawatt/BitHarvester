@@ -400,7 +400,7 @@ public class Scanner {
     }
 
     private boolean skipComment() {
-        boolean isStartOfLine = skipWhitespace();
+        skipWhitespace();
         if (!isAtEnd() && peekChar(0) == '/') {
             switch (peekChar(1)) {
                 case '/':
