@@ -133,6 +133,8 @@ public enum TokenType{
     PLUS_PLUS,
     EQUAL,
     EQUAL_EQUAL,
+    GREATER_THAN, 
+    LESS_THAN, 
     NOT_EQUAL,
     LESS_EQUAL,
     GREATER_EQUAL,
@@ -217,10 +219,11 @@ public enum TokenType{
     STRING,
     
     
-    N, 
+    
+    N,
     ;
 
-    public static boolean peekModifier(TokenType tokenType) {
+    public static boolean isModifier(TokenType tokenType) {
         return  tokenType == TokenType.PUBLIC ||
                 tokenType == TokenType.PRIVATE ||
                 tokenType == TokenType.PROTECTED ||
@@ -232,6 +235,16 @@ public enum TokenType{
                 tokenType == TokenType.STATIC ||
                 tokenType == TokenType.TRANSIENT ||
                 tokenType == TokenType.VOLATILE ||
+                false; // Return false if the current token is not a modifier
+    }
+    
+    public static boolean isCompareOperator(TokenType tokenType) {
+        return  tokenType == TokenType.EQUAL_EQUAL ||
+                tokenType == TokenType.NOT_EQUAL ||
+                tokenType == TokenType.GREATER_EQUAL ||
+                tokenType == TokenType.LESS_EQUAL ||
+                tokenType == TokenType.GREATER_THAN ||
+                tokenType == TokenType.LESS_THAN ||
                 false; // Return false if the current token is not a modifier
     }
 
@@ -249,7 +262,7 @@ public enum TokenType{
         }
       }
     
-      public static boolean peekType(TokenType tokenType) {
+      public static boolean isType(TokenType tokenType) {
         switch (tokenType) {
           case BOOLEAN:
           case BYTE:
@@ -259,6 +272,7 @@ public enum TokenType{
           case LONG:
           case SHORT:
           case STRING:
+          case VOID:
             return true;
           default:
             return false;

@@ -7,6 +7,9 @@ public class Example extends A {
 
     public void displayInfo(int number) {
         System.out.println(number);
+        if(a == b){
+
+        }
     }
 
 }

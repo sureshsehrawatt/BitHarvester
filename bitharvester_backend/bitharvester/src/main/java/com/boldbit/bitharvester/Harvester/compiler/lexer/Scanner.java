@@ -216,13 +216,13 @@ public class Scanner {
         boolean checkChar = Character.isJavaIdentifierStart(ch);
         if (checkChar) {
             while (checkChar) {
-                nextChar();
-                ch = peekChar();
+                ch = nextChar();
                 checkChar = Character.isJavaIdentifierPart(ch);
             }
         } else {
             throw new UnsupportedOperationException("Invalid char at scanIdentifierOrKeyword: " + ch);
         }
+        index--;
         String value = contents.substring(valueStartIndex, index);
         Keywords keyword = Keywords.contains(value);
         // Keywords k = Keywords.get(value);
