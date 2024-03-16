@@ -464,6 +464,7 @@ public class Parser {
         if (peek(TokenType.CATCH)) {
             SourcePosition catchStart = getTreeStartLocation();
             eat(TokenType.CATCH);
+            // TODO -
             ParseTree ex = parseParenthesizedExpression();
             catchBody = parseBlock(catchStart);
         } else {
