@@ -4,11 +4,15 @@ import java.util.*;
 
 public class Example extends A {
     // first iteration done
+    public final int[] arr = new int[6];
     public final int number1 = 6289;
+    // int aa[] = new int[6];
+    int[] ab;
     int a = 10;
     int b = 99;
-
+    
     Example(int a) {
+        // arr[1] = 10;
         byte ll = 15;
         for (int z = 0; z < 10; z++) { // Changed 'a' to 'z' in the loop condition
             // Your logic here
@@ -36,6 +40,9 @@ public class Example extends A {
         do {
             // Your logic here
         } while (condition);
+    }
+    public static void main(String[] args) {
+        
     }
 
 }

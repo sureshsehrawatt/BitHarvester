@@ -41,6 +41,7 @@ public enum Keywords {
     SHORT("short", TokenType.SHORT),
     STATIC("static", TokenType.STATIC),
     STRICTFP("strictfp", TokenType.STRICTFP),
+    STRING("string", TokenType.STRING),
     SUPER("super", TokenType.SUPER),
     SWITCH("switch", TokenType.SWITCH),
     SYNCHRONIZED("synchronized", TokenType.SYNCHRONIZED),

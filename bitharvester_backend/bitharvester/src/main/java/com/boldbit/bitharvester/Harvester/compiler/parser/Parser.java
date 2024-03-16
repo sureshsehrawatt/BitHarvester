@@ -6,11 +6,13 @@ import com.boldbit.bitharvester.Harvester.compiler.lexer.Scanner;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment.Type;
 import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
+import com.boldbit.bitharvester.Harvester.compiler.token.LiteralToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
 import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
+import com.boldbit.bitharvester.Harvester.compiler.trees.ArrayDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.BlockTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ClassDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ConstructorDeclarationTree;
@@ -199,12 +201,18 @@ public class Parser {
         if (TokenType.isType(peekToken().tokenType)) {
             type = peekToken();
             eat(peekToken().tokenType);
+            if (peek(TokenType.OPEN_SQUARE)) {
+                return parseArrayDeclaration(modifiersList, type, null, start);
+            }
         }
 
         IdentifierToken name = null;
         if (peek(TokenType.IDENTIFIER)) {
             name = (IdentifierToken) peekToken();
             eat(peekToken().tokenType);
+            if (peek(TokenType.OPEN_SQUARE)) {
+                return parseArrayDeclaration(modifiersList, type, name, start);
+            }
         }
 
         if (peek(TokenType.OPEN_PAREN)) {
@@ -410,6 +418,51 @@ public class Parser {
     // return syntaxError(startPosition, Collections.singletonList(statement),
     // errorMessage);
     // }
+
+    private ParseTree parseArrayDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name,
+            SourcePosition start) {
+        eat(TokenType.OPEN_SQUARE);
+        ArrayList<ParseTree> elements = new ArrayList<>();
+        if (name == null) {
+            if (peek(TokenType.CLOSE_SQUARE)) {
+                eat(TokenType.CLOSE_SQUARE);
+            }
+            if (peek(TokenType.IDENTIFIER)) {
+                name = (IdentifierToken) peekToken();
+                eat(peekToken().tokenType);
+            }
+            if (peek(TokenType.SEMI_COLON)) {
+                eat(TokenType.SEMI_COLON);
+                return new ArrayDeclarationTree(modifiersList, type, name, elements, getTreeLocation(start));
+            }
+        } else if (peek(TokenType.SEMI_COLON)) {
+            eat(TokenType.SEMI_COLON);
+            return new ArrayDeclarationTree(modifiersList, type, name, elements, getTreeLocation(start));
+        }
+        if (peek(TokenType.EQUAL)) {
+            eat(TokenType.EQUAL);
+            if (peek(TokenType.NEW)) {
+                eat(TokenType.NEW);
+                eat(type.tokenType);
+                eat(TokenType.OPEN_SQUARE);
+                if (peek(TokenType.LITERAL)) {
+                    LiteralToken literalToken = (LiteralToken) peekToken();
+                    int value = Integer.parseInt(literalToken.value);
+                    while (value > 0) {
+                        elements.add(new ParseTree(null, null));
+                        value--;
+                    }
+                }
+                eat(TokenType.CLOSE_SQUARE);
+                eat(TokenType.SEMI_COLON);
+                return new ArrayDeclarationTree(modifiersList, type, name, elements, getTreeLocation(start));
+            } else if (peek(TokenType.EQUAL)) {
+
+            }
+        }
+        eat(TokenType.CLOSE_SQUARE);
+        return null;
+    }
 
     private ParseTree parseAssertStatement(SourcePosition start) {
         // TODO Auto-generated method stub
@@ -634,17 +687,33 @@ public class Parser {
         ArrayList<ParseTree> parameters = new ArrayList<>();
         while (!peek(TokenType.CLOSE_PAREN)) {
             SourcePosition start = getTreeStartLocation();
+            IdentifierToken name = null;
             if (!TokenType.isType(peekToken().tokenType)) {
                 break;
             }
             Token type = peekToken();
             nextToken();
-            if (!peek(TokenType.IDENTIFIER)) {
+            if (peek(TokenType.OPEN_SQUARE)) {
+                eat(TokenType.OPEN_SQUARE);
+                eat(TokenType.CLOSE_SQUARE);
+                name = (IdentifierToken) eat(TokenType.IDENTIFIER);
+                parameters.add(new ArrayDeclarationTree(null, type, name, null, getTreeLocation(start)));
+            } else if (!peek(TokenType.IDENTIFIER)) {
                 break;
             }
-            IdentifierToken name = (IdentifierToken) eat(TokenType.IDENTIFIER);
-            // FIXME - implement ParameterDeclarationTree
-            parameters.add(new ParameterDeclarationTree(type, name, null, getTreeLocation(start)));
+
+            if (peek(TokenType.IDENTIFIER)) {
+                name = (IdentifierToken) eat(TokenType.IDENTIFIER);
+                if (peek(TokenType.OPEN_SQUARE)) {
+                    eat(TokenType.OPEN_SQUARE);
+                    parameters.add(new ArrayDeclarationTree(null, type, name, null, getTreeLocation(start)));
+                    eat(TokenType.CLOSE_SQUARE);
+                } else {
+                    // FIXME - implement ParameterDeclarationTree
+                    parameters.add(new ParameterDeclarationTree(type, name, null, getTreeLocation(start)));
+                }
+            }
+
             if (peek(TokenType.COMMA)) {
                 eat(TokenType.COMMA);
             } else {
