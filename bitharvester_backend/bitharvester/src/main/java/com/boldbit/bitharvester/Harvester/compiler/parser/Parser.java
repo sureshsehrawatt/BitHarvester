@@ -8,7 +8,7 @@ import com.boldbit.bitharvester.Harvester.compiler.token.Comment.Type;
 import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.BlockTree;
@@ -709,8 +709,8 @@ public class Parser {
         return token;
     }
 
-    private SourceRange getTreeLocation(SourcePosition start) {
-        return new SourceRange(start, getTreeEndLocation());
+    private TreeLocation getTreeLocation(SourcePosition start) {
+        return new TreeLocation(start, getTreeEndLocation());
     }
 
     private SourcePosition getTreeEndLocation() {
@@ -766,7 +766,7 @@ public class Parser {
         private SourcePosition lastCommentEndPosition;
 
         @Override
-        public void recordComment(Type type, String value, SourceRange range) {
+        public void recordComment(Type type, String value, TreeLocation range) {
             if (lastCommentEndPosition == null || range.end.offset > this.lastCommentEndPosition.offset) {
                 value = value.trim();
                 comments.add(new Comment(type, value, range));

@@ -1,6 +1,6 @@
 package com.boldbit.bitharvester.Harvester.compiler.trees;
 
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
 public class TryStatementTree extends ParseTree {
 
@@ -8,7 +8,7 @@ public class TryStatementTree extends ParseTree {
     public final ParseTree catchBody; 
     public final ParseTree finallyBody;
 
-    public TryStatementTree(ParseTree tryBody, ParseTree catchBody, ParseTree finallyBody, SourceRange treeLocation) {
+    public TryStatementTree(ParseTree tryBody, ParseTree catchBody, ParseTree finallyBody, TreeLocation treeLocation) {
         super(ParseTreeType.TRY_STATEMENT, treeLocation);
         this.tryBody = tryBody;
         this.catchBody = catchBody;

@@ -1,11 +1,11 @@
 package com.boldbit.bitharvester.Harvester.compiler.token;
 
-//TODO - change name SourceRange to TreeLocation
-public class SourceRange {
+//TODO - change name TreeLocation to TreeLocation
+public class TreeLocation {
     public final SourcePosition start;
     public final SourcePosition end;
 
-    public SourceRange(SourcePosition start, SourcePosition end) {
+    public TreeLocation(SourcePosition start, SourcePosition end) {
         this.start = start;
         this.end = end;
     }

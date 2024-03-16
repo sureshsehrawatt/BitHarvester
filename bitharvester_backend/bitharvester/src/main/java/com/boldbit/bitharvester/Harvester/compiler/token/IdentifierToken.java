@@ -4,7 +4,7 @@ public class IdentifierToken extends Token {
 
     public final String value;
 
-    public IdentifierToken(String value, SourceRange location) {
+    public IdentifierToken(String value, TreeLocation location) {
         super(TokenType.IDENTIFIER, location);
         this.value = value;
     }

@@ -1,6 +1,6 @@
 package com.boldbit.bitharvester.Harvester.compiler.trees;
 
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,8 @@ public class ProgramTree extends ParseTree{
     public final ArrayList<ParseTree> sourceElements;
     public final ArrayList<Comment> sourceComments;
 
-    public ProgramTree(ArrayList<ParseTree> sourceElements, ArrayList<Comment> sourceComments, SourceRange sourceRange) {
-        super(ParseTreeType.PROGRAM, sourceRange);
+    public ProgramTree(ArrayList<ParseTree> sourceElements, ArrayList<Comment> sourceComments, TreeLocation treeLocation) {
+        super(ParseTreeType.PROGRAM, treeLocation);
         this.sourceElements = sourceElements;
         this.sourceComments = sourceComments;
     }

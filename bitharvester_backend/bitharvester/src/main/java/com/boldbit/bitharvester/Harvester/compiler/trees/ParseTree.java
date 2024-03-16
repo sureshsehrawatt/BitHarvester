@@ -1,13 +1,13 @@
 package com.boldbit.bitharvester.Harvester.compiler.trees;
 
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
 public class ParseTree {
     public ParseTreeType parseTreeType;
-    public SourceRange sourceRange;
+    public TreeLocation treeLocation;
 
-    public ParseTree(ParseTreeType parseTreeType, SourceRange sourceRange){
+    public ParseTree(ParseTreeType parseTreeType, TreeLocation treeLocation){
         this.parseTreeType = parseTreeType;
-        this.sourceRange = sourceRange;
+        this.treeLocation = treeLocation;
     }
 }

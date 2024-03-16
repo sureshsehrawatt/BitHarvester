@@ -21,11 +21,11 @@ public class Comment {
 
     public Type type;
     public String value;
-    public SourceRange sourceRange;
+    public TreeLocation treeLocation;
 
-    public Comment(Type type, String value, SourceRange sourceRange){
+    public Comment(Type type, String value, TreeLocation treeLocation){
         this.type = type;
         this.value = value;
-        this.sourceRange = sourceRange;
+        this.treeLocation = treeLocation;
     }
 }

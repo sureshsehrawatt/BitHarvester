@@ -8,7 +8,7 @@
 // import java.util.regex.Matcher;
 // import java.util.regex.Pattern;
 
-// import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+// import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 // import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 // import com.boldbit.bitharvester.Harvester.compiler.token.TokenImages;
 // import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
@@ -43,8 +43,8 @@
 //                     String commentedBeforeString = line.substring(0, line.indexOf("*/") + 2);
 //                     multiLineString += commentedBeforeString;
 //                     // FixMe
-//                     SourceRange sourceRange = null;
-//                     tokens.add(new Token(TokenType.MULTILINE_COMMENT, sourceRange));
+//                     TreeLocation treeLocation = null;
+//                     tokens.add(new Token(TokenType.MULTILINE_COMMENT, treeLocation));
 //                     // tokens.add(new Token("MULTILINE_COMMENT", multiLineString, lineNumber));
 //                     String unCommentedString = line.substring(line.indexOf("*/") + 2);
 //                     tokens.addAll(tokenizeLine(unCommentedString, lineNumber));
@@ -60,8 +60,8 @@
 //                     String unCommentedAfterString = line.substring(line.indexOf("*/") + 2);
 //                     tokens.addAll(tokenizeLine(unCommentedBeforeString, lineNumber));
 //                     // FixMe
-//                     SourceRange sourceRange = null;
-//                     tokens.add(new Token(TokenType.MULTILINE_COMMENT, sourceRange));
+//                     TreeLocation treeLocation = null;
+//                     tokens.add(new Token(TokenType.MULTILINE_COMMENT, treeLocation));
 //                     // tokens.add(new Token("MULTILINE_COMMENT", commentedString, lineNumber));
 //                     tokens.addAll(tokenizeLine(unCommentedAfterString, lineNumber));
 //                 } else {

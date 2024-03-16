@@ -10,7 +10,7 @@ import com.boldbit.bitharvester.Harvester.compiler.token.Keywords;
 import com.boldbit.bitharvester.Harvester.compiler.token.LiteralToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 import com.boldbit.bitharvester.Harvester.compiler.token.StringLiteralToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
@@ -291,7 +291,7 @@ public class Scanner {
         }
     }
 
-    private SourceRange getTokenRange(SourcePosition position) {
+    private TreeLocation getTokenRange(SourcePosition position) {
         lineNumberScanner.rewindTo(position);
         return lineNumberScanner.getSourceRange(position.offset, index);
     }
@@ -390,7 +390,7 @@ public class Scanner {
         return new Token(type, getTokenRange(beginToken));
     }
 
-    private SourceRange getTokenRange(int beginToken) {
+    private TreeLocation getTokenRange(int beginToken) {
         return lineNumberScanner.getSourceRange(beginToken, index);
     }
 
@@ -431,7 +431,7 @@ public class Scanner {
                     type = Comment.Type.DOC;
                 }
             }
-            SourceRange range = lineNumberScanner.getSourceRange(startOffset, index);
+            TreeLocation range = lineNumberScanner.getSourceRange(startOffset, index);
             String value = this.contents.substring(startOffset, index);
             recordComment(type, value, range);
         } else {
@@ -450,12 +450,12 @@ public class Scanner {
         while (!isAtEnd() && !isLineTerminator(peekChar())) {
             nextChar();
         }
-        SourceRange range = lineNumberScanner.getSourceRange(startOffset, index);
+        TreeLocation range = lineNumberScanner.getSourceRange(startOffset, index);
         String value = this.contents.substring(startOffset, index);
         recordComment(type, value, range);
     }
 
-    private void recordComment(Comment.Type type, String value, SourceRange range) {
+    private void recordComment(Comment.Type type, String value, TreeLocation range) {
         commentRecorder.recordComment(type, value, range);
     }
 
@@ -519,7 +519,7 @@ public class Scanner {
     }
 
     public interface CommentRecorder {
-        void recordComment(Comment.Type type, String value, SourceRange range);
+        void recordComment(Comment.Type type, String value, TreeLocation range);
     }
 
     public Token nextToken() {

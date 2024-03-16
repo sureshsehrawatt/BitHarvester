@@ -2,7 +2,7 @@ package com.boldbit.bitharvester.Harvester.compiler.parser;
 
 import com.boldbit.bitharvester.Harvester.compiler.token.SourceFile;
 import com.boldbit.bitharvester.Harvester.compiler.token.SourcePosition;
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
 public class LineNumberScanner {
     SourceFile sourceFile;
@@ -54,8 +54,8 @@ public class LineNumberScanner {
         }
     }
 
-    public SourceRange getSourceRange(int startOffset, int endOffset) {
-        return new SourceRange(getSourcePosition(startOffset), getSourcePosition(endOffset));
+    public TreeLocation getSourceRange(int startOffset, int endOffset) {
+        return new TreeLocation(getSourcePosition(startOffset), getSourcePosition(endOffset));
     }
 
     public void rewindTo(SourcePosition position) {

@@ -3,9 +3,9 @@ package com.boldbit.bitharvester.Harvester.compiler.token;
 public class Token {
 
     public final TokenType tokenType;
-    public final SourceRange location;
+    public final TreeLocation location;
 
-    public Token(TokenType tokenType, SourceRange location){
+    public Token(TokenType tokenType, TreeLocation location){
         this.tokenType = tokenType;
         this.location = location;
     }

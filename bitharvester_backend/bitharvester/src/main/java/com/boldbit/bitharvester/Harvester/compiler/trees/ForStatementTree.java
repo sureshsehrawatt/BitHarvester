@@ -1,6 +1,6 @@
 package com.boldbit.bitharvester.Harvester.compiler.trees;
 
-import com.boldbit.bitharvester.Harvester.compiler.token.SourceRange;
+import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
 public class ForStatementTree extends ParseTree{
     
@@ -10,7 +10,7 @@ public class ForStatementTree extends ParseTree{
     public final ParseTree body;
 
     public ForStatementTree(ParseTree initialization, ParseTree condition, ParseTree update, ParseTree body,
-    SourceRange treeLocation) {
+    TreeLocation treeLocation) {
         super(ParseTreeType.FOR_STATEMENT, treeLocation);
         this.initialization = initialization;
         this.condition = condition;
