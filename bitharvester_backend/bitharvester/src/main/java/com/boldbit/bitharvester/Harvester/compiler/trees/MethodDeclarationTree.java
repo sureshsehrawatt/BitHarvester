@@ -10,14 +10,14 @@ public class MethodDeclarationTree extends ParseTree {
     public final ArrayList<Token> modifiersList;
     public final boolean isStatic;
     public final MethodSignatureTree methodSignatureTree;
-    public final ParseTree functionBody;
+    public final ParseTree methodBody;
 
-    public MethodDeclarationTree(ArrayList<Token> modifiersList, boolean isStatic, MethodSignatureTree methodSignatureTree, ParseTree functionBody, SourceRange sourceRange) {
+    public MethodDeclarationTree(ArrayList<Token> modifiersList, boolean isStatic, MethodSignatureTree methodSignatureTree, ParseTree methodBody, SourceRange sourceRange) {
         super(ParseTreeType.METHOD_DECLARATION, sourceRange);
         this.modifiersList = modifiersList;
         this.isStatic = isStatic;
         this.methodSignatureTree = methodSignatureTree;
-        this.functionBody = functionBody;
+        this.methodBody = methodBody;
     }
 
 }

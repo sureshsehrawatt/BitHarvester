@@ -17,6 +17,13 @@ public class ExpressionTree extends ParseTree {
         this.operator = null;
         this.expressionTree = null;
     }
+    public ExpressionTree(Token operand1, Token operator, SourceRange sourceRange) {
+        super(ParseTreeType.CONDITIONAL_EXPRESSION, sourceRange);
+        this.operand1 = operand1;
+        this.operand2 = null;
+        this.operator = operator;
+        this.expressionTree = null;
+    }
     public ExpressionTree(Token operand1, Token operand2, Token operator, SourceRange sourceRange) {
         super(ParseTreeType.CONDITIONAL_EXPRESSION, sourceRange);
         this.operand1 = operand1;

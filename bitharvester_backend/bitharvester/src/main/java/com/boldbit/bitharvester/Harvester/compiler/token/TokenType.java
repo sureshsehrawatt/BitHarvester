@@ -138,8 +138,6 @@ public enum TokenType{
     NOT_EQUAL,
     LESS_EQUAL,
     GREATER_EQUAL,
-    OPEN_ANGLE,
-    CLOSE_ANGLE,
     LEFT_SHIFT,
     RIGHT_SHIFT,
     LEFT_SHIFT_EQUAL,
@@ -151,10 +149,11 @@ public enum TokenType{
     BIGINT,
 
     // other
-    NUMBER,
+    LITERAL,
+    STRING_LITERAL,
 
     // EOF
-    END_OF_FILE, STRING_LITERAL,
+    END_OF_FILE, 
 
 
     // Keywords
@@ -245,6 +244,17 @@ public enum TokenType{
                 tokenType == TokenType.LESS_EQUAL ||
                 tokenType == TokenType.GREATER_THAN ||
                 tokenType == TokenType.LESS_THAN ||
+                false; // Return false if the current token is not a modifier
+    }
+    
+    public static boolean isOperator(TokenType tokenType) {
+        return  tokenType == TokenType.PLUS ||
+                tokenType == TokenType.MINUS ||
+                tokenType == TokenType.STAR ||
+                tokenType == TokenType.SLASH ||
+                tokenType == TokenType.PERCENT ||
+                tokenType == TokenType.PLUS_PLUS ||
+                tokenType == TokenType.MINUS_MINUS ||
                 false; // Return false if the current token is not a modifier
     }
 

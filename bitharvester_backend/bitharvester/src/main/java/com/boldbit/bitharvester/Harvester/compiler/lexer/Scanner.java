@@ -101,11 +101,11 @@ public class Scanner {
                         nextChar();
                         return createToken(TokenType.LESS_EQUAL, beginToken);
                     default:
-                        return createToken(TokenType.OPEN_ANGLE, beginToken);
+                        return createToken(TokenType.LESS_THAN, beginToken);
                 }
             case '>':
                 if (typeParameterLevel > 0)
-                    return createToken(TokenType.CLOSE_ANGLE, beginToken);
+                    return createToken(TokenType.GREATER_THAN, beginToken);
                 switch (peekChar()) {
                     case '>':
                         nextChar();
@@ -127,7 +127,7 @@ public class Scanner {
                         nextChar();
                         return createToken(TokenType.GREATER_EQUAL, beginToken);
                     default:
-                        return createToken(TokenType.CLOSE_ANGLE, beginToken);
+                        return createToken(TokenType.GREATER_THAN, beginToken);
                 }
             case '=':
                 switch (peekChar()) {
@@ -344,7 +344,7 @@ public class Scanner {
             default:
                 break;
         }
-        return new LiteralToken(TokenType.NUMBER, getTokenString(beginToken), getTokenRange(beginToken));
+        return new LiteralToken(TokenType.LITERAL, getTokenString(beginToken), getTokenRange(beginToken));
     }
 
     private String getTokenString(int beginIndex) {

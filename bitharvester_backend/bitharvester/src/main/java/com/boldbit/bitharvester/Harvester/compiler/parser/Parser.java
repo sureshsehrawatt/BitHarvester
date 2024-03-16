@@ -13,8 +13,11 @@ import com.boldbit.bitharvester.Harvester.compiler.token.Token;
 import com.boldbit.bitharvester.Harvester.compiler.token.TokenType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.BlockTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ClassDeclarationTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.ConstructorDeclarationTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.DoWhileStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ExpressionStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ExpressionTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.ForStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.IfStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ImportDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodDeclarationTree;
@@ -24,6 +27,7 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTre
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTreeType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ProgramTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.TryStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.VariableDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.WhileStatementTree;
 
@@ -91,8 +95,8 @@ public class Parser {
         IdentifierToken className = null;
         IdentifierToken superClass = null;
         ArrayList<ParseTree> variablesList = new ArrayList<>();
-        // TODO - 
-        ArrayList<ParseTree> methodsList = new ArrayList<>();
+        // TODO -
+        // ArrayList<ParseTree> methodsList = new ArrayList<>();
 
         if (peek(TokenType.CLASS)) {
             eat(TokenType.CLASS);
@@ -140,7 +144,8 @@ public class Parser {
         return modifiersList;
     }
 
-    private ArrayList<ParseTree> classOrInterfaceBody(IdentifierToken className, ArrayList<ParseTree> variablesList, boolean isInterface) {
+    private ArrayList<ParseTree> classOrInterfaceBody(IdentifierToken className, ArrayList<ParseTree> variablesList,
+            boolean isInterface) {
         ArrayList<ParseTree> classElements = new ArrayList<>();
         while (!peek(TokenType.CLOSE_CURLY)) {
             Token token = peekToken();
@@ -149,10 +154,10 @@ public class Parser {
                 continue;
             }
             ParseTree pt = classOrInterfaceBodyDeclaration(className, variablesList, isInterface);
-            if(pt == null && variablesList.size()>0){
+            if (pt == null && variablesList.size() > 0) {
                 classElements.addAll(variablesList);
                 variablesList.clear();
-            }else {
+            } else {
                 classElements.add(pt);
             }
         }
@@ -160,7 +165,8 @@ public class Parser {
         return classElements;
     }
 
-    private ParseTree classOrInterfaceBodyDeclaration(IdentifierToken className, ArrayList<ParseTree> variablesList, boolean isInterface) {
+    private ParseTree classOrInterfaceBodyDeclaration(IdentifierToken className, ArrayList<ParseTree> variablesList,
+            boolean isInterface) {
         SourcePosition start = getTreeStartLocation();
         ArrayList<Token> modifiersList = new ArrayList<>();
         while (isModifier()) {
@@ -180,8 +186,11 @@ public class Parser {
 
         // constructor
         if (peek(TokenType.IDENTIFIER)) {
-            // TODO -
-            return parseConstructorDeclaration();
+            IdentifierToken t = (IdentifierToken) peekToken();
+            if (t.value.equals(className.value)) {
+                // TODO -
+                return parseConstructorDeclaration();
+            }
             // return methodDeclaratorRest(pos, mods, type, name, typarams, isInterface,
             // isVoid, dc);
         }
@@ -209,11 +218,8 @@ public class Parser {
         return null;
     }
 
-    private ParseTree parseVariableDeclarations(ArrayList<Token> modifiersList, Token type, IdentifierToken name, ArrayList<ParseTree> variablesList, SourcePosition start) {
-        return parseVariableDeclarationsRest(modifiersList, type, name, variablesList, start);
-    }
-
-    private ParseTree parseVariableDeclarationsRest(ArrayList<Token> modifiersList, Token type, IdentifierToken name, ArrayList<ParseTree> variablesList, SourcePosition start) {
+    private ParseTree parseVariableDeclarations(ArrayList<Token> modifiersList, Token type, IdentifierToken name,
+            ArrayList<ParseTree> variablesList, SourcePosition start) {
         variablesList.add(parseVariableDeclaration(modifiersList, type, name, start));
         while (peek(TokenType.COMMA)) {
             nextToken();
@@ -228,23 +234,24 @@ public class Parser {
         return parseVariableDeclaration(modifiersList, type, name, start);
     }
 
-    private ParseTree parseVariableDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name, SourcePosition start) {
+    private ParseTree parseVariableDeclaration(ArrayList<Token> modifiersList, Token type, IdentifierToken name,
+            SourcePosition start) {
         // TODO - type
-        if(peek(TokenType.SEMI_COLON)){
+        if (peek(TokenType.SEMI_COLON)) {
             eat(TokenType.SEMI_COLON);
             return new VariableDeclarationTree(modifiersList, type, name, null, getTreeLocation(start));
         }
-        
-        if(peek(TokenType.EQUAL)){
+
+        if (peek(TokenType.EQUAL)) {
             Token init = null;
             eat(TokenType.EQUAL);
-            if(peek(TokenType.IDENTIFIER)){
+            if (peek(TokenType.IDENTIFIER)) {
                 init = peekToken();
                 eat(TokenType.IDENTIFIER);
                 return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
-            } else if (peek(TokenType.NUMBER)){
+            } else if (peek(TokenType.LITERAL)) {
                 init = peekToken();
-                eat(TokenType.NUMBER);
+                eat(TokenType.LITERAL);
                 return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
             }
             return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
@@ -270,24 +277,33 @@ public class Parser {
 
     private BlockTree parseBlock(SourcePosition start) {
         eat(TokenType.OPEN_CURLY);
-        ArrayList<ParseTree> statements = blockStatements();
+        ArrayList<ParseTree> variablesList = new ArrayList<>();
+        ArrayList<ParseTree> statements = blockStatements(variablesList);
         eat(TokenType.CLOSE_CURLY);
         return new BlockTree(statements, getTreeLocation(start));
     }
 
-    private ArrayList<ParseTree> blockStatements() {
+    private ArrayList<ParseTree> blockStatements(ArrayList<ParseTree> variablesList) {
         ArrayList<ParseTree> statements = new ArrayList<>();
         while (true) {
-            ParseTree statement = blockStatement();
-            if (statement == null) {
+            if (peekToken().tokenType == TokenType.SEMI_COLON) {
+                eat(TokenType.SEMI_COLON);
+                continue;
+            }
+            ParseTree statement = blockStatement(variablesList);
+            if (variablesList.size() > 0) {
+                statements.addAll(variablesList);
+                variablesList.clear();
+            } else if (statement == null) {
                 return statements;
             } else {
                 statements.add(statement);
             }
+
         }
     }
 
-    private ParseTree blockStatement() {
+    private ParseTree blockStatement(ArrayList<ParseTree> variablesList) {
         Token token = peekToken();
         switch (token.tokenType) {
             case CLOSE_CURLY:
@@ -313,9 +329,29 @@ public class Parser {
             case CATCH:
                 return parseStatement();
             default:
-                break;
+                return parseBlockVariables(variablesList);
         }
-        return null;
+    }
+
+    private ParseTree parseBlockVariables(ArrayList<ParseTree> variablesList) {
+        SourcePosition start = getTreeStartLocation();
+        ArrayList<Token> modifiersList = new ArrayList<>();
+        while (isModifier()) {
+            modifiersList.add(peekToken());
+            eat(peekToken().tokenType);
+        }
+        Token type = null;
+        if (TokenType.isType(peekToken().tokenType)) {
+            type = peekToken();
+            eat(peekToken().tokenType);
+        }
+
+        IdentifierToken name = null;
+        if (peek(TokenType.IDENTIFIER)) {
+            name = (IdentifierToken) peekToken();
+            eat(peekToken().tokenType);
+        }
+        return parseVariableDeclarations(modifiersList, type, name, variablesList, start);
     }
 
     private ParseTree parseStatement() {
@@ -421,13 +457,35 @@ public class Parser {
     }
 
     private ParseTree parseTryStatement(SourcePosition start) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseTryStatement'");
+        eat(TokenType.TRY);
+        ParseTree tryBody = parseBlock(start);
+        ParseTree catchBody = null;
+        ParseTree finallyBody = null;
+        if (peek(TokenType.CATCH)) {
+            SourcePosition catchStart = getTreeStartLocation();
+            eat(TokenType.CATCH);
+            ParseTree ex = parseParenthesizedExpression();
+            catchBody = parseBlock(catchStart);
+        } else {
+            System.out.println("Missing catch block");
+        }
+
+        if (peek(TokenType.CATCH)) {
+            SourcePosition finallyStart = getTreeStartLocation();
+            finallyBody = parseBlock(finallyStart);
+        }
+        return new TryStatementTree(tryBody, catchBody, finallyBody, getTreeLocation(start));
     }
 
     private ParseTree parseDoWhileStatement(SourcePosition start) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseDoWhileStatement'");
+        eat(TokenType.DO);
+        ParseTree body = parseBlock(start);
+        eat(TokenType.WHILE);
+        eat(TokenType.OPEN_PAREN);
+        ParseTree condition = parseExpressionStatement(start);
+        eat(TokenType.CLOSE_PAREN);
+        eat(TokenType.SEMI_COLON);
+        return new DoWhileStatementTree(body, condition, getTreeLocation(start));
     }
 
     private ParseTree parseWhileStatement(SourcePosition start) {
@@ -435,13 +493,21 @@ public class Parser {
         eat(TokenType.OPEN_PAREN);
         ParseTree condition = parseExpressionStatement(start);
         eat(TokenType.CLOSE_PAREN);
-        ArrayList<ParseTree> body = blockStatements();
+        ParseTree body = parseBlock(start);
         return new WhileStatementTree(condition, body, getTreeLocation(start));
     }
 
     private ParseTree parseForStatement(SourcePosition start) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseForStatement'");
+        eat(TokenType.FOR);
+        eat(TokenType.OPEN_PAREN);
+        ParseTree initialization = parseFormalVariable();
+        eat(TokenType.SEMI_COLON);
+        ParseTree condition = parseExpressionStatement(start);
+        eat(TokenType.SEMI_COLON);
+        ParseTree update = parseExpressionStatement(start);
+        eat(TokenType.CLOSE_PAREN);
+        ParseTree body = parseBlock(start);
+        return new ForStatementTree(initialization, condition, update, body, getTreeLocation(start));
     }
 
     private ParseTree parseIfStatement(SourcePosition start) {
@@ -449,19 +515,16 @@ public class Parser {
         eat(TokenType.OPEN_PAREN);
         ParseTree condition = parseExpressionStatement(start);
         eat(TokenType.CLOSE_PAREN);
-        ArrayList<ParseTree> ifClause = blockStatements();
-        ArrayList<ParseTree> elseClause = null;
+        ParseTree ifClause = parseBlock(start);
+        ParseTree elseClause = null;
         if (peek(TokenType.ELSE)) {
-            elseClause = blockStatements();
+            SourcePosition endClauseStart = getTreeStartLocation();
+            elseClause = parseBlock(endClauseStart);
         }
         return new IfStatementTree(condition, ifClause, elseClause, getTreeLocation(start));
     }
 
     private ParseTree parseExpressionStatement(SourcePosition start) {
-        return parsePrimaryExpression(start);
-    }
-
-    private ParseTree parsePrimaryExpression(SourcePosition start) {
         ArrayList<ExpressionTree> expressions = new ArrayList<>();
         ArrayList<Token> expresion = new ArrayList<>();
 
@@ -469,14 +532,22 @@ public class Parser {
             if (peek(TokenType.IDENTIFIER)) {
                 IdentifierToken oprn1 = (IdentifierToken) peekToken();
                 eat(TokenType.IDENTIFIER);
-                if (expressions.size() < 1 && peek(TokenType.CLOSE_PAREN)) {
+                if (expressions.size() < 2 && peek(TokenType.CLOSE_PAREN)) {
                     expressions.add(new ExpressionTree(oprn1, getTreeLocation(start)));
                     break;
-                } else if (isCompareOperator()) {
+                } else if (peek(TokenType.PLUS_PLUS) || peek(TokenType.MINUS_MINUS)) {
                     Token op = peekToken();
                     eat(peekToken().tokenType);
-                    if (peek(TokenType.IDENTIFIER)) {
-                        IdentifierToken oprn2 = (IdentifierToken) peekToken();
+                    if (peek(TokenType.CLOSE_PAREN)) {
+                        expressions.add(new ExpressionTree(oprn1, op, getTreeLocation(start)));
+                        break;
+                    }
+                    expressions.add(new ExpressionTree(oprn1, op, getTreeLocation(start)));
+                } else if (isCompareOperator() || isOperator()) {
+                    Token op = peekToken();
+                    eat(peekToken().tokenType);
+                    if (peek(TokenType.IDENTIFIER) || peek(TokenType.LITERAL)) {
+                        Token oprn2 = peekToken();
                         eat(peekToken().tokenType);
                         if (peek(TokenType.CLOSE_PAREN)) {
                             expressions.add(new ExpressionTree(oprn1, oprn2, op, getTreeLocation(start)));
@@ -490,22 +561,63 @@ public class Parser {
                     }
                 }
                 expresion.add(peekToken());
-                // } else if (peek(TokenType.LITERAL)) {
 
             } else if (peek(TokenType.OPEN_PAREN)) {
                 ParseTree t = parseParenthesizedExpression();
                 ExpressionTree et = (ExpressionTree) t;
                 expressions.add(et);
-            } else {
-                // Handle other types of expressions
+            } else if (TokenType.isType(peekToken().tokenType)) {
+                // TODO -
+                // ParseTree var = parseFormalVariable();
+                // expressions.add((ExpressionTree) parseFormalVariable());
+            } else if (peek(TokenType.SEMI_COLON)) {
+                return new ExpressionStatementTree(expressions, getTreeLocation(start));
             }
         }
         return new ExpressionStatementTree(expressions, getTreeLocation(start));
+    }
 
+    private ParseTree parseFormalVariable() {
+        SourcePosition start = getTreeStartLocation();
+        ArrayList<Token> modifiersList = new ArrayList<>();
+        while (isModifier()) {
+            modifiersList.add(peekToken());
+            eat(peekToken().tokenType);
+        }
+        Token type = null;
+        if (TokenType.isType(peekToken().tokenType)) {
+            type = peekToken();
+            eat(peekToken().tokenType);
+        }
+
+        IdentifierToken name = null;
+        if (peek(TokenType.IDENTIFIER)) {
+            name = (IdentifierToken) peekToken();
+            eat(peekToken().tokenType);
+        }
+
+        Token init = null;
+        if (peek(TokenType.EQUAL)) {
+            eat(TokenType.EQUAL);
+            if (peek(TokenType.IDENTIFIER) || peek(TokenType.LITERAL)) {
+                init = peekToken();
+                eat(init.tokenType);
+            }
+        }
+
+        if (name != null && type != null) {
+            return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
+        }
+
+        return null;
     }
 
     private boolean isCompareOperator() {
         return TokenType.isCompareOperator(peekToken().tokenType);
+    }
+
+    private boolean isOperator() {
+        return TokenType.isOperator(peekToken().tokenType);
     }
 
     private ParseTree parseParenthesizedExpression() {
@@ -543,49 +655,13 @@ public class Parser {
     }
 
     private ParseTree parseConstructorDeclaration() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseConstructorDeclaration'");
+        SourcePosition start = getTreeStartLocation();
+        IdentifierToken name = (IdentifierToken) peekToken();
+        eat(TokenType.IDENTIFIER);
+        ArrayList<ParseTree> formalParameters = formalParameters();
+        ParseTree body = parseBlock(start);
+        return new ConstructorDeclarationTree(name, formalParameters, body, getTreeLocation(start));
     }
-
-    // private ParseTree parseFieldDeclaration(ArrayList<Token> modifiersList, Token
-    // type, IdentifierToken name, SourcePosition start) {
-    // Token value = null;
-    // if (!peek(TokenType.SEMI_COLON)) {
-    // nextToken();
-    // value = peekToken();
-    // // TODO - fix this
-    // eat(TokenType.IDENTIFIER);
-    // }
-    // eat(TokenType.SEMI_COLON);
-    // return new FieldDeclarationTree(modifiersList, false, type, name, value,
-    // getTreeLocation(start));
-    // }
-
-    // private boolean peekAssignmentOperator() {
-    // return TokenType.peekAssignmentOperator(peekToken().tokenType);
-    // }
-
-    // private IdentifierToken eatIdOrKeywordAsId() {
-    // Token token = nextToken();
-    // if (token.tokenType == TokenType.IDENTIFIER) {
-    // return (IdentifierToken) token;
-    // } else if (Keywords.isKeyword(token.tokenType)) {
-    // return new IdentifierToken(Keywords.get(token.tokenType).toString(),
-    // token.location);
-    // } else {
-    // System.out.println("Excepetion in eatIdOrKeywordAsId");
-    // }
-    // return null;
-    // }
-
-    // private boolean peekIdOrKeyword() {
-    // return peekIdOrKeyword(0);
-    // }
-
-    // private boolean peekIdOrKeyword(int index) {
-    // TokenType type = peekType(index);
-    // return TokenType.IDENTIFIER == type || Keywords.isKeyword(type);
-    // }
 
     private boolean isModifier() {
         return TokenType.isModifier(peekToken().tokenType);
