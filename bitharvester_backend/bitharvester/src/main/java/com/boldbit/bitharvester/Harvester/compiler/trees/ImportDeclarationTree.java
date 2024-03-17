@@ -9,7 +9,7 @@ public class ImportDeclarationTree extends ParseTree {
 
     public final ArrayList<Token> qualifiedName;
 
-    public ImportDeclarationTree(ParseTreeType parseTreeType, ArrayList<Token> qualifiedName, TreeLocation treeLocation) {
+    public ImportDeclarationTree(ArrayList<Token> qualifiedName, TreeLocation treeLocation) {
         super(ParseTreeType.IMPORT_DECLARATION, treeLocation);
         this.qualifiedName = qualifiedName;
     }

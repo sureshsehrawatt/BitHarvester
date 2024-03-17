@@ -27,7 +27,6 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.MethodSignatureTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.PackageDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
-import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTreeType;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ProgramTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.TryStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.VariableDeclarationTree;
@@ -753,7 +752,7 @@ public class Parser {
             }
         }
         eat(TokenType.SEMI_COLON);
-        return new PackageDeclarationTree(ParseTreeType.PACKAGE_DECLARARTION, qualifiedName, getTreeLocation(start));
+        return new PackageDeclarationTree(qualifiedName, getTreeLocation(start));
     }
 
     private SourcePosition getTreeStartLocation() {
@@ -807,7 +806,7 @@ public class Parser {
             }
         }
         eat(TokenType.SEMI_COLON);
-        return new ImportDeclarationTree(ParseTreeType.IMPORT_DECLARATION, qualifiedName, getTreeLocation(start));
+        return new ImportDeclarationTree(qualifiedName, getTreeLocation(start));
     }
 
     private boolean peekImportDeclaration() {
