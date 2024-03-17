@@ -200,6 +200,7 @@ public class Scanner {
             case '8':
             case '9':
                 return scanPostDigit(beginToken);
+            // TODO - implement string tokenization
             case '"':
             case '\'':
                 return scanStringLiteral(beginToken, ch);
@@ -212,26 +213,21 @@ public class Scanner {
     }
 
     private Token scanIdentifierOrKeyword(int beginToken, char ch) {
-        int valueStartIndex = index - 1;
-        boolean checkChar = Character.isJavaIdentifierStart(ch);
-        if (checkChar) {
-            while (checkChar) {
-                ch = nextChar();
-                checkChar = Character.isJavaIdentifierPart(ch);
-            }
+        int identifierStartIndex = index - 1;
+        boolean isValidIdentifierStart = Character.isJavaIdentifierStart(ch);
+        if (isValidIdentifierStart) {
+            while (Character.isJavaIdentifierPart(ch = nextChar()))
+                ;
         } else {
             throw new UnsupportedOperationException("Invalid char at scanIdentifierOrKeyword: " + ch);
         }
         index--;
-        String value = contents.substring(valueStartIndex, index);
+        String value = contents.substring(identifierStartIndex, index);
         Keywords keyword = Keywords.contains(value);
-        // Keywords k = Keywords.get(value);
-        if (!(keyword == Keywords.N)){
+        if (!(keyword == Keywords.N)) {
             return new Token(keyword.getTokenType(), getTokenRange(beginToken));
         }
-
         return new IdentifierToken(value, getTokenRange(beginToken));
-
     }
 
     private Token scanTemplateLiteral(int beginToken) {
@@ -249,7 +245,7 @@ public class Scanner {
             hasUnescapedUnicodeLineOrParagraphSeparator = hasUnescapedUnicodeLineOrParagraphSeparator || c == '\u2028'
                     || c == '\u2029';
             if (!skipStringLiteralChar()) {
-                return new StringLiteralToken(TokenType.STRING_LITERAL, getTokenString(beginIndex),
+                return new StringLiteralToken(getTokenString(beginIndex),
                         getTokenRange(startingPosition), hasUnescapedUnicodeLineOrParagraphSeparator);
             }
         }
@@ -260,7 +256,7 @@ public class Scanner {
         } else {
             nextChar();
         }
-        return new StringLiteralToken(TokenType.STRING_LITERAL, getTokenString(beginIndex),
+        return new StringLiteralToken(getTokenString(beginIndex),
                 getTokenRange(startingPosition), hasUnescapedUnicodeLineOrParagraphSeparator);
     }
 
@@ -419,26 +415,26 @@ public class Scanner {
         int startOffset = index;
         nextChar(); // '/'
         nextChar(); // '*'
-        while (!isAtEnd() && (peekChar() != '*' || peekChar(1) != '/')) {
-            nextChar();
-        }
-        if (!isAtEnd()) {
-            nextChar();
-            nextChar();
-            Comment.Type type = Comment.Type.BLOCK;
-            if (index - startOffset > 4) {
-                if (this.contents.charAt(startOffset + 2) == '*') {
-                    type = Comment.Type.DOC;
-                }
+
+        while (true) {
+            if (isAtEnd()) {
+                throw new UnsupportedOperationException("unterminated comment");
             }
-            TreeLocation range = lineNumberScanner.getSourceRange(startOffset, index);
-            String value = this.contents.substring(startOffset, index);
-            recordComment(type, value, range);
-        } else {
-            // TODO -
-            // reportError("unterminated comment");
-            throw new UnsupportedOperationException("unterminated comment");
+            char currentChar = nextChar();
+            if (currentChar == '*' && peekChar() == '/') {
+                nextChar(); // Consume the '/'
+                break;
+            }
         }
+
+        Comment.Type type = Comment.Type.BLOCK;
+        if (index - startOffset > 4 && contents.charAt(startOffset + 2) == '*') {
+            type = Comment.Type.DOC;
+        }
+
+        TreeLocation range = lineNumberScanner.getSourceRange(startOffset, index);
+        String value = contents.substring(startOffset, index);
+        recordComment(type, value, range);
     }
 
     private void skipSingleLineComment() {

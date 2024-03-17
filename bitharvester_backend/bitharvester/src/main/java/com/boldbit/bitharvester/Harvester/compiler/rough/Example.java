@@ -1,8 +1,10 @@
 package com.boldbit.bitharvester.Harvester.compiler.rough;
 
 import java.util.*;
+import java.util.ArrayList;
+import java.applet.*;
 
-public class Example extends A {
+public final class Example extends A {
     // first iteration done
     public final int[] arr = new int[6];
     public final int number1 = 6289;

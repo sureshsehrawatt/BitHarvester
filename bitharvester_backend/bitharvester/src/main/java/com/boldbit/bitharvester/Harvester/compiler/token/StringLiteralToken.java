@@ -4,8 +4,8 @@ public class StringLiteralToken extends LiteralToken {
 
     public final boolean hasUnescapedUnicodeLineOrParagraphSeparator;
 
-    public StringLiteralToken(TokenType tokenType, String value, TreeLocation location, boolean hasUnescapedUnicodeLineOrParagraphSeparator) {
-        super(tokenType, value, location);
+    public StringLiteralToken(String value, TreeLocation location, boolean hasUnescapedUnicodeLineOrParagraphSeparator) {
+        super(TokenType.STRING_LITERAL, value, location);
         this.hasUnescapedUnicodeLineOrParagraphSeparator = hasUnescapedUnicodeLineOrParagraphSeparator;
     }
 
