@@ -2,19 +2,19 @@ package com.boldbit.bitharvester.Harvester.compiler.token;
 
 public class StringLiteralToken extends LiteralToken {
 
-    public final boolean hasUnescapedUnicodeLineOrParagraphSeparator;
+    // public final boolean hasUnescapedUnicodeLineOrParagraphSeparator;
 
-    public StringLiteralToken(String value, TreeLocation location, boolean hasUnescapedUnicodeLineOrParagraphSeparator) {
+    public StringLiteralToken(String value, TreeLocation location) {
         super(TokenType.STRING_LITERAL, value, location);
-        this.hasUnescapedUnicodeLineOrParagraphSeparator = hasUnescapedUnicodeLineOrParagraphSeparator;
+        // this.hasUnescapedUnicodeLineOrParagraphSeparator = hasUnescapedUnicodeLineOrParagraphSeparator;
     }
 
     public String toString() {
         return value;
     }
 
-    public boolean hasUnescapedUnicodeLineOrParagraphSeparator() {
-        return hasUnescapedUnicodeLineOrParagraphSeparator;
-    }
+    // public boolean hasUnescapedUnicodeLineOrParagraphSeparator() {
+    //     return hasUnescapedUnicodeLineOrParagraphSeparator;
+    // }
 
 }

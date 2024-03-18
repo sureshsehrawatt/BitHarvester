@@ -214,7 +214,7 @@ public class Scanner {
         }
     }
 
-    private Token scanIdentifierOrKeyword(int beginToken, char ch) {
+    private Token scanIdentifierOrKeyword(int beginIndex, char ch) {
         int identifierStartIndex = index - 1;
         boolean isValidIdentifierStart = Character.isJavaIdentifierStart(ch);
         if (isValidIdentifierStart) {
@@ -228,41 +228,25 @@ public class Scanner {
         Keywords keyword = Keywords.contains(value);
 
         if (Character.isUpperCase(value.charAt(0)) && prevToken().tokenType != TokenType.PERIOD) {
-            return new ClassIdentifierToken(value, getTokenRange(beginToken));
+            return new ClassIdentifierToken(value, getTokenRange(beginIndex));
         } else if (!(keyword == Keywords.N)) {
-            return new Token(keyword.getTokenType(), getTokenRange(beginToken));
+            return new Token(keyword.getTokenType(), getTokenRange(beginIndex));
         }
-        return new IdentifierToken(value, getTokenRange(beginToken));
+        return new IdentifierToken(value, getTokenRange(beginIndex));
     }
 
+    private Token scanStringLiteral(int beginIndex, char ch) {
+        // String literals might span multiple lines.
+        int identifierStartIndex = index;
+        while(nextChar() != '"');
+        String stringContent = contents.substring(identifierStartIndex, index-1);
+
+        return new StringLiteralToken(stringContent, getTokenRange(beginIndex));
+    }
+    
     private Token scanTemplateLiteral(int beginToken) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'scanTemplateLiteral'");
-    }
-
-    private Token scanStringLiteral(int beginIndex, char terminator) {
-        // String literals might span multiple lines.
-        SourcePosition startingPosition = getPosition(beginIndex);
-
-        boolean hasUnescapedUnicodeLineOrParagraphSeparator = false;
-        while (peekStringLiteralChar(terminator)) {
-            char c = peekChar();
-            hasUnescapedUnicodeLineOrParagraphSeparator = hasUnescapedUnicodeLineOrParagraphSeparator || c == '\u2028'
-                    || c == '\u2029';
-            if (!skipStringLiteralChar()) {
-                return new StringLiteralToken(getTokenString(beginIndex),
-                        getTokenRange(startingPosition), hasUnescapedUnicodeLineOrParagraphSeparator);
-            }
-        }
-        if (peekChar() != terminator) {
-            // TODO -
-            // reportError(startingPosition, "Unterminated string literal");
-            throw new UnsupportedOperationException("Unterminated string literal");
-        } else {
-            nextChar();
-        }
-        return new StringLiteralToken(getTokenString(beginIndex),
-                getTokenRange(startingPosition), hasUnescapedUnicodeLineOrParagraphSeparator);
     }
 
     private boolean skipStringLiteralChar() {

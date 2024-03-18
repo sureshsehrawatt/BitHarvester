@@ -248,7 +248,7 @@ public class Parser {
         if (peek(TokenType.EQUAL)) {
             eat(TokenType.EQUAL);
             Token init = null;
-            if (peek(TokenType.IDENTIFIER) || peek(TokenType.LITERAL)) {
+            if (peek(TokenType.IDENTIFIER) || peek(TokenType.LITERAL) || peek(TokenType.STRING_LITERAL)) {
                 init = eat(peekToken().tokenType);
             }
             return new VariableDeclarationTree(modifiersList, type, name, init, getTreeLocation(start));
