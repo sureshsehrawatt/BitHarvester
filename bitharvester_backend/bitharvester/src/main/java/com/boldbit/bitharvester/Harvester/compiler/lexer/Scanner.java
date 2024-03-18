@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.boldbit.bitharvester.Harvester.compiler.parser.LineNumberScanner;
+import com.boldbit.bitharvester.Harvester.compiler.token.ClassIdentifierToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
 import com.boldbit.bitharvester.Harvester.compiler.token.IdentifierToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Keywords;
@@ -24,6 +25,7 @@ public class Scanner {
     int index;
     int contentsLength;
     List<Token> tokensList = new ArrayList<>();
+    Token prevToken = null;
     private int typeParameterLevel;
 
     public Scanner(SourceFile sourceFile, int offset, CommentRecorder commentRecorder) {
@@ -224,7 +226,10 @@ public class Scanner {
         index--;
         String value = contents.substring(identifierStartIndex, index);
         Keywords keyword = Keywords.contains(value);
-        if (!(keyword == Keywords.N)) {
+
+        if (Character.isUpperCase(value.charAt(0)) && prevToken().tokenType != TokenType.PERIOD) {
+            return new ClassIdentifierToken(value, getTokenRange(beginToken));
+        } else if (!(keyword == Keywords.N)) {
             return new Token(keyword.getTokenType(), getTokenRange(beginToken));
         }
         return new IdentifierToken(value, getTokenRange(beginToken));
@@ -519,8 +524,12 @@ public class Scanner {
     }
 
     public Token nextToken() {
-        peekToken();
+        prevToken = peekToken();
         return tokensList.remove(0);
+    }
+
+    public Token prevToken() {
+        return prevToken;
     }
 
 }

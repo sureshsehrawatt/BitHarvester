@@ -8,6 +8,7 @@ public final class Example extends A {
     // first iteration done
     public final int[] arr = new int[6];
     public final int number1 = 6289;
+    public String newArray;
     // int aa[] = new int[6];
     int[] ab;
     int a = 10;

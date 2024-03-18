@@ -219,7 +219,8 @@ public enum TokenType{
     
     
     
-    N,
+    N, 
+    CLASS_IDENTIFIER,
     ;
 
     public static boolean isModifier(TokenType tokenType) {
