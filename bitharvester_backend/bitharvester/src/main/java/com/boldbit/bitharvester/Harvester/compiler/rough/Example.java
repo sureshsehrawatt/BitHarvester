@@ -8,7 +8,7 @@ public final class Example extends A {
     // first iteration done
     public final int[] arr = new int[6];
     public final int number1 = 6289;
-    public String newArray = "HelloWorld!";
+    public String newArray = "Hello World!";
     // int aa[] = new int[6];
     int[] ab;
     int a = 10;
@@ -17,7 +17,7 @@ public final class Example extends A {
     Example(int a) {
         // arr[1] = 10;
         byte ll = 15;
-        for (int z = 0; z < 10; z++) { // Changed 'a' to 'z' in the loop condition
+        for (int z = 0; z < 10; z+=1) { // Changed 'a' to 'z' in the loop condition
             // Your logic here
         }
     }

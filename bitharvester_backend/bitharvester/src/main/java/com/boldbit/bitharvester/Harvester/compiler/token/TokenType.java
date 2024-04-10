@@ -102,7 +102,7 @@ package com.boldbit.bitharvester.Harvester.compiler.token;
     
 } */
 
-public enum TokenType{
+public enum TokenType {
     // Special Characters & Operators
     OPEN_CURLY,
     CLOSE_CURLY,
@@ -133,8 +133,8 @@ public enum TokenType{
     PLUS_PLUS,
     EQUAL,
     EQUAL_EQUAL,
-    GREATER_THAN, 
-    LESS_THAN, 
+    GREATER_THAN,
+    LESS_THAN,
     NOT_EQUAL,
     LESS_EQUAL,
     GREATER_EQUAL,
@@ -153,8 +153,7 @@ public enum TokenType{
     STRING_LITERAL,
 
     // EOF
-    END_OF_FILE, 
-
+    END_OF_FILE,
 
     // Keywords
     ASSERT,
@@ -190,13 +189,13 @@ public enum TokenType{
     TRY,
     VOID,
     WHILE,
-    IDENTIFIER, 
-    
+    IDENTIFIER,
+
     // Access Modifiers
     PRIVATE,
     PROTECTED,
     PUBLIC,
-    
+
     // Non-Access Modifiers:
     ABSTRACT,
     FINAL,
@@ -206,7 +205,7 @@ public enum TokenType{
     STATIC,
     TRANSIENT,
     VOLATILE,
-    
+
     // type
     BOOLEAN,
     BYTE,
@@ -216,15 +215,13 @@ public enum TokenType{
     LONG,
     SHORT,
     STRING,
-    
-    
-    
-    N, 
+
+    N,
     CLASS_IDENTIFIER,
     ;
 
     public static boolean isModifier(TokenType tokenType) {
-        return  tokenType == TokenType.PUBLIC ||
+        return tokenType == TokenType.PUBLIC ||
                 tokenType == TokenType.PRIVATE ||
                 tokenType == TokenType.PROTECTED ||
                 tokenType == TokenType.ABSTRACT ||
@@ -237,9 +234,9 @@ public enum TokenType{
                 tokenType == TokenType.VOLATILE ||
                 false; // Return false if the current token is not a modifier
     }
-    
+
     public static boolean isCompareOperator(TokenType tokenType) {
-        return  tokenType == TokenType.EQUAL_EQUAL ||
+        return tokenType == TokenType.EQUAL_EQUAL ||
                 tokenType == TokenType.NOT_EQUAL ||
                 tokenType == TokenType.GREATER_EQUAL ||
                 tokenType == TokenType.LESS_EQUAL ||
@@ -247,9 +244,10 @@ public enum TokenType{
                 tokenType == TokenType.LESS_THAN ||
                 false; // Return false if the current token is not a modifier
     }
-    
+
     public static boolean isOperator(TokenType tokenType) {
-        return  tokenType == TokenType.PLUS ||
+        return tokenType == TokenType.EQUAL ||
+                tokenType == TokenType.PLUS ||
                 tokenType == TokenType.MINUS ||
                 tokenType == TokenType.STAR ||
                 tokenType == TokenType.SLASH ||
@@ -259,39 +257,83 @@ public enum TokenType{
                 false; // Return false if the current token is not a modifier
     }
 
+    public static boolean isArithmeticOperator(TokenType tokenType) {
+        return tokenType == TokenType.PLUS ||
+                tokenType == TokenType.MINUS ||
+                tokenType == TokenType.STAR ||
+                tokenType == TokenType.SLASH ||
+                tokenType == TokenType.PERCENT ||
+                false; // Return false if the current token is not a modifier
+    }
+
+    public static boolean isUnaryOperator(TokenType tokenType) {
+        return tokenType == TokenType.PLUS_PLUS ||
+                tokenType == TokenType.MINUS_MINUS ||
+                false; // Return false if the current token is not a modifier
+    }
+
     public static boolean peekAssignmentOperator(TokenType tokenType) {
         switch (tokenType) {
-          case EQUAL:
-          case PLUS_EQUAL:
-          case MINUS_EQUAL:
-          case LEFT_SHIFT_EQUAL:
-          case RIGHT_SHIFT_EQUAL:
-          case UNSIGNED_RIGHT_SHIFT_EQUAL:
-            return true;
-          default:
-            return false;
+            case EQUAL:
+            case PLUS_EQUAL:
+            case MINUS_EQUAL:
+            case LEFT_SHIFT_EQUAL:
+            case RIGHT_SHIFT_EQUAL:
+            case UNSIGNED_RIGHT_SHIFT_EQUAL:
+                return true;
+            default:
+                return false;
         }
-      }
-    
-      public static boolean isType(TokenType tokenType) {
+    }
+
+    public static boolean isType(TokenType tokenType) {
         switch (tokenType) {
-          case BOOLEAN:
-          case BYTE:
-          case CHAR:
-          case FLOAT:
-          case INT:
-          case LONG:
-          case SHORT:
-          case STRING:
-          case VOID:
-            return true;
-          default:
-            return false;
+            case BOOLEAN:
+            case BYTE:
+            case CHAR:
+            case FLOAT:
+            case INT:
+            case LONG:
+            case SHORT:
+            case STRING:
+            case VOID:
+                return true;
+            default:
+                return false;
         }
-      }
+    }
+
+    public static boolean isBinaryOperator(TokenType tokenType) {
+        switch (tokenType) {
+            case PERIOD: // .
+            case PLUS: // +
+            case MINUS: // -
+            case STAR: // *
+            case SLASH: // /
+            case PERCENT: // %
+            case CARET: // ^
+            case AMPERSAND: // &
+            case BAR: // |
+            case LESS_THAN: // <
+            case GREATER_THAN: // >
+            case EQUAL: // =
+            case NOT_EQUAL: // !=
+            case LESS_EQUAL: // <=
+            case GREATER_EQUAL: // >=
+            case LEFT_SHIFT: // <<
+            case RIGHT_SHIFT: // >>
+            case UNSIGNED_RIGHT_SHIFT: // >>>
+            case PLUS_EQUAL: // +=
+            case MINUS_EQUAL: // -=
+            case LEFT_SHIFT_EQUAL: // <<=
+            case RIGHT_SHIFT_EQUAL: // >>=
+            case UNSIGNED_RIGHT_SHIFT_EQUAL: // >>>=
+                return true;
+            default:
+                return false;
+        }
+    }
 }
-
-
 
 class CheckTokenType {
     public String checkKeyword(String word) {

@@ -34,7 +34,7 @@ public enum ParseTreeType {
                                 CONDITIONAL_EXPRESSION,
                                 UNARY_EXPRESSION,
     NEW_EXPRESSION,
-                                ARGUMENT_LIST,
+    ARGUMENT_LIST,
                                 CALL_EXPRESSION,
     CLASS_DECLARATION,
     PAREN_EXPRESSION,
@@ -46,5 +46,7 @@ public enum ParseTreeType {
     FIELD_DECLARATION, 
     METHOD_PARAMETER_DECLARATION, 
     METHOD_SIGNATURE, 
-    CONSTRUCTOR_STATEMENT,
+    CONSTRUCTOR_STATEMENT, 
+    METHOD_CALL, 
+    EXPRESSION,
 }
