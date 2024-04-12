@@ -619,6 +619,16 @@ expression
     | lambdaExpression // Java8
     ;
 
+primary
+    : '(' expression ')'
+    | THIS
+    | SUPER
+    | literal
+    | identifier
+    | typeTypeOrVoid '.' CLASS
+    | nonWildcardTypeArguments (explicitGenericInvocationSuffix | THIS arguments)
+    ;
+
 // Java17
 pattern
     : variableModifier* typeType annotation* identifier
@@ -641,16 +651,6 @@ lambdaParameters
 lambdaBody
     : expression
     | block
-    ;
-
-primary
-    : '(' expression ')'
-    | THIS
-    | SUPER
-    | literal
-    | identifier
-    | typeTypeOrVoid '.' CLASS
-    | nonWildcardTypeArguments (explicitGenericInvocationSuffix | THIS arguments)
     ;
 
 // Java17
