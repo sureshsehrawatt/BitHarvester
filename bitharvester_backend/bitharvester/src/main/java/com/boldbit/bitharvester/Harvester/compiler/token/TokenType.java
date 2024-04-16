@@ -272,7 +272,7 @@ public enum TokenType {
                 false; // Return false if the current token is not a modifier
     }
 
-    public static boolean peekAssignmentOperator(TokenType tokenType) {
+    public static boolean isAssignmentOperator(TokenType tokenType) {
         switch (tokenType) {
             case EQUAL:
             case PLUS_EQUAL:
