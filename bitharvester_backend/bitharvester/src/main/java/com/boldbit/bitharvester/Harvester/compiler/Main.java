@@ -10,7 +10,7 @@ public class Main {
         // new Lexer("src/rough/Example.java");
         System.out.println("--------------------------------------< Runner >-----------------------------------");
         
-        String filePath = "/Users/cavisson/Documents/Projects/bitharvester/bitharvester_backend/bitharvester/src/main/java/com/boldbit/bitharvester/Harvester/compiler/rough/Example.java";
+        String filePath = "/Users/cavisson/Documents/Projects/bitharvester/bitharvester_backend/bitharvester/src/main/java/com/boldbit/bitharvester/Harvester/compiler/rough/Dog.java";
         Path path = Paths.get(filePath);
         
         StaticSourceFile staticSourceFile = new StaticSourceFile(path);

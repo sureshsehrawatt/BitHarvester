@@ -359,8 +359,16 @@ public class Parser {
         }
         eat(peekToken().tokenType);
 
+        if (peek(TokenType.OPEN_SQUARE)) {
+            return parseArrayDeclaration(null, type, null, start);
+        }
+        
         IdentifierToken name = (IdentifierToken) peekToken();
         eat(peekToken().tokenType);
+        
+        if (peek(TokenType.OPEN_SQUARE)) {
+            return parseArrayDeclaration(null, type, name, start);
+        }
 
         return parseVariableDeclarations(null, type, name, variablesList, start);
     }

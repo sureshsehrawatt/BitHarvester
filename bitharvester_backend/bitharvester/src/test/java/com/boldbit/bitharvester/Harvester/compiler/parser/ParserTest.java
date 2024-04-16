@@ -37,6 +37,32 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
+            "package com.boldbit.bitharvester.Harvester.compiler.rough;"
+    })
+    public void parsePackageDeclarationTest(String test) {
+        parser = new Parser(new SourceFile("", test));
+        result = parser.parsePackageDeclaration();
+        assertNotNull(result, "Parse tree should not be null");
+        assertEquals(ParseTreeType.PACKAGE_DECLARARTION, result.parseTreeType, "");
+    }
+
+    @Timeout(10)
+    @ParameterizedTest(name = "Test: \"{0}\"")
+    @ValueSource(strings = {
+            "import java.util.*;",
+            "import java.util.ArrayList;",
+            "import static java.lang.Math.*;",
+    })
+    public void parseImportDeclarationTest(String test) {
+        parser = new Parser(new SourceFile("", test));
+        result = parser.parseImportDeclaration();
+        assertNotNull(result, "Parse tree should not be null");
+        assertEquals(ParseTreeType.IMPORT_DECLARATION, result.parseTreeType, "");
+    }
+
+    @Timeout(10)
+    @ParameterizedTest(name = "Test: \"{0}\"")
+    @ValueSource(strings = {
             "class MyClass {}",
             "class MyClass extends SecondClass {}",
     // "class MyClass"
@@ -62,7 +88,6 @@ public class ParserTest {
         ArrayList<ParseTree> variableList = new ArrayList<>();
         parser = new Parser(new SourceFile("", test));
         result = parser.classOrInterfaceBodyDeclaration(classIdentifierToken, variableList, false);
-        // assertNotNull(result, "Parse tree should not be null");
         // TODO: VARIABLE_DECLARATION -> FIELD_DECLARATION
         assertEquals(ParseTreeType.FIELD_DECLARATION, variableList.get(0).parseTreeType, "");
     }
@@ -120,7 +145,7 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-    "try{ int a = b; } catch(Exception e){ int a=c; } finally{ int a=d; }",
+            "try{ int a = b; } catch(Exception e){ int a=c; } finally{ int a=d; }",
     })
     public void parseTryStatementTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -147,9 +172,9 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-        "do{ }while(check);",
-        "do{ }while(a>b);",
-        "do{ }while(str.length());",
+            "do{ }while(check);",
+            "do{ }while(a>b);",
+            "do{ }while(str.length());",
     })
     public void parseDoWhileStatementTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -161,9 +186,9 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-        "while(check){ }",
-        "while(a>b){ }",
-        "while(str.length()){ }",
+            "while(check){ }",
+            "while(a>b){ }",
+            "while(str.length()){ }",
     })
     public void parseWhileStatementTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -193,14 +218,13 @@ public class ParserTest {
         assertEquals(ParseTreeType.FOR_STATEMENT, result.parseTreeType, "");
     }
 
-
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-    "(int a)",
-    "(int a, int b)",
-    "(int a, String str)",
-    "(int a, int b[])",
+            "(int a)",
+            "(int a, int b)",
+            "(int a, String str)",
+            "(int a, int b[])",
     })
     public void formalParametersTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -239,33 +263,7 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-            "package com.boldbit.bitharvester.Harvester.compiler.rough;"
-    })
-    public void parsePackageDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
-        result = parser.parsePackageDeclaration();
-        assertNotNull(result, "Parse tree should not be null");
-        assertEquals(ParseTreeType.PACKAGE_DECLARARTION, result.parseTreeType, "");
-    }
-
-    @Timeout(10)
-    @ParameterizedTest(name = "Test: \"{0}\"")
-    @ValueSource(strings = {
-            "import java.util.*;",
-            "import java.util.ArrayList;",
-            "import static java.lang.Math.*;",
-    })
-    public void parseImportDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
-        result = parser.parseImportDeclaration();
-        assertNotNull(result, "Parse tree should not be null");
-        assertEquals(ParseTreeType.IMPORT_DECLARATION, result.parseTreeType, "");
-    }
-
-    @Timeout(10)
-    @ParameterizedTest(name = "Test: \"{0}\"")
-    @ValueSource(strings = {
-    "i++, ++j)"
+            "i++, ++j)"
     })
     public void parseExpressionListTest(String test) {
         parser = new Parser(new SourceFile("", test));
