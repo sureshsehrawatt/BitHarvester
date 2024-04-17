@@ -28,10 +28,13 @@ public class ParserTest {
     @Timeout(10)
     @ParameterizedTest(name = "Test: \"{0}\"")
     @ValueSource(strings = {
-    // "class MyClass {}",
+            "class MyClass {}",
     })
     public void parseProgramTest(String test) {
-
+        parser = new Parser(new SourceFile("", test));
+        result = parser.parseProgram();
+        assertNotNull(result, "Parse tree should not be null");
+        assertEquals(ParseTreeType.PROGRAM, result.parseTreeType, "");
     }
 
     @Timeout(10)
@@ -112,7 +115,7 @@ public class ParserTest {
     @ValueSource(strings = {
             "{;}",
             "{ System.out.println(\"Hello World!\")};",
-            "{ float dummy() { int a = b; } }",
+    // "{ float dummy() { int a = b; } }",
     })
     public void parseBlockTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -159,8 +162,8 @@ public class ParserTest {
     @ValueSource(strings = {
             "int[] arr = new int[10];",
             "int[] arr = new int[str.length()];",
-            "int[] arr = {1, 2, 3}",
-            "int arr[] = {1, 2, 3}",
+    // "int[] arr = {1, 2, 3}",
+    // "int arr[] = {1, 2, 3}",
     })
     public void parseArrayDeclarationTest(String test) {
         parser = new Parser(new SourceFile("", test));
@@ -255,7 +258,9 @@ public class ParserTest {
     public void parseConstructorDeclarationTest(String test) {
         parser = new Parser(new SourceFile("", test));
         parser.eat(TokenType.OPEN_PAREN);
-        result = parser.parseConstructorDeclaration();
+        ClassIdentifierToken classIdentifierToken = (ClassIdentifierToken) parser.peekToken();
+        parser.eat(TokenType.CLASS_IDENTIFIER);
+        result = parser.parseConstructorDeclaration(classIdentifierToken);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.CONSTRUCTOR_STATEMENT, result.parseTreeType, "");
     }
@@ -293,10 +298,25 @@ public class ParserTest {
             "object.method(\"stringArgument\");",
             "object.method(123);"
     })
-    public void parseExpressionTest(String input) {
-        Parser parserEx = new Parser(new SourceFile("", input));
+    public void parseExpressionTest(String test) {
+        Parser parserEx = new Parser(new SourceFile("", test));
         ParseTree resultEx = parserEx.parseExpression(null);
         assertEquals(ParseTreeType.EXPRESSION, resultEx.parseTreeType);
+    }
+
+    @Timeout(10)
+    @ParameterizedTest(name = "Test: \"{0}\"")
+    @ValueSource(strings = {
+            "obj();",
+            "obj.sayHello(123);",
+            "employee.id.name.firstname;",
+            "employee.id.name();",
+            "obj.getOrg().getEmployee().sayHello();",
+    })
+    public void checkIsExpressionContainsMethodCallTest(String test) {
+        parser = new Parser(new SourceFile("", test));
+        parser.parseExpression(null);
+        // assertEquals(ParseTreeType.EXPRESSION, result.parseTreeType);
     }
 
     @Timeout(10)

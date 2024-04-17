@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import com.boldbit.bitharvester.Harvester.compiler.token.TreeLocation;
 
-public class VariableDeclarationListTree extends ParseTree{
+// FIXME : no use
+public class VariableDeclarationListTree extends ParseTree {
     public final ArrayList<ParseTree> variableDeclarationsTrees;
 
     public VariableDeclarationListTree(ArrayList<ParseTree> variableDeclarationsTrees, TreeLocation treeLocation) {

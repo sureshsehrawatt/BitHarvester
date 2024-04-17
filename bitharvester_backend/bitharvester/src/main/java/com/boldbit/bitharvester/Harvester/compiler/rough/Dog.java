@@ -11,8 +11,11 @@ public final class Dog extends Animal {
     String parentClassName = "Animal";
     public static final String className = "Dog";
 
+    Dog dogObj = new Dog();
+
     Dog() {
-        a = 10;
+        a *= 10;
+        obj.getOrg().getEmployee().sayHello();
         speak(5);
     }
 

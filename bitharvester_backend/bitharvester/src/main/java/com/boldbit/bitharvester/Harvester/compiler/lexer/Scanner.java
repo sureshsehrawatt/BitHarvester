@@ -146,13 +146,21 @@ public class Scanner {
                 }
                 return createToken(TokenType.BANG, beginToken);
             case '*':
+                if (peek('=')) {
+                    nextChar();
+                    return createToken(TokenType.STAR_EQUAL, beginToken);
+                }
                 return createToken(TokenType.STAR, beginToken);
+            case '/':
+                if (peek('=')) {
+                    nextChar();
+                    return createToken(TokenType.SLASH_EQUAL, beginToken);
+                }
+                return createToken(TokenType.SLASH, beginToken);
             case '%':
                 return createToken(TokenType.PERCENT, beginToken);
             case '^':
                 return createToken(TokenType.CARET, beginToken);
-            case '/':
-                return createToken(TokenType.SLASH, beginToken);
             case '+':
                 switch (peekChar()) {
                     case '+':
@@ -238,12 +246,13 @@ public class Scanner {
     private Token scanStringLiteral(int beginIndex, char ch) {
         // String literals might span multiple lines.
         int identifierStartIndex = index;
-        while(nextChar() != '"');
-        String stringContent = contents.substring(identifierStartIndex, index-1);
+        while (nextChar() != '"')
+            ;
+        String stringContent = contents.substring(identifierStartIndex, index - 1);
 
         return new StringLiteralToken(stringContent, getTokenRange(beginIndex));
     }
-    
+
     private Token scanTemplateLiteral(int beginToken) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'scanTemplateLiteral'");

@@ -129,6 +129,8 @@ public enum TokenType {
     MINUS,
     PLUS_EQUAL,
     MINUS_EQUAL,
+    STAR_EQUAL, 
+    SLASH_EQUAL,
     MINUS_MINUS,
     PLUS_PLUS,
     EQUAL,
@@ -217,7 +219,7 @@ public enum TokenType {
     STRING,
 
     N,
-    CLASS_IDENTIFIER,
+    CLASS_IDENTIFIER, 
     ;
 
     public static boolean isModifier(TokenType tokenType) {
@@ -277,6 +279,8 @@ public enum TokenType {
             case EQUAL:
             case PLUS_EQUAL:
             case MINUS_EQUAL:
+            case STAR_EQUAL:
+            case SLASH_EQUAL:
             case LEFT_SHIFT_EQUAL:
             case RIGHT_SHIFT_EQUAL:
             case UNSIGNED_RIGHT_SHIFT_EQUAL:

@@ -11,16 +11,16 @@ public class ClassDeclarationTree extends ParseTree {
     public final ArrayList<Token> modifiers;
     public final ClassIdentifierToken className;
     public final ClassIdentifierToken superClass;
-    public final ArrayList<ParseTree> body;
+    public final ClassElements classElements;
 
     public ClassDeclarationTree(
-        ArrayList<Token> modifiers, ClassIdentifierToken className, ClassIdentifierToken superClass, ArrayList<ParseTree> body, TreeLocation treeLocation) {
+            ArrayList<Token> modifiers, ClassIdentifierToken className, ClassIdentifierToken superClass,
+            ClassElements classElements, TreeLocation treeLocation) {
 
         super(ParseTreeType.CLASS_DECLARATION, treeLocation);
         this.modifiers = modifiers;
         this.className = className;
         this.superClass = superClass;
-        this.body = body;
+        this.classElements = classElements;
     }
-
 }
