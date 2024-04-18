@@ -115,6 +115,7 @@ public class ParserTest {
     @ValueSource(strings = {
             "{;}",
             "{ System.out.println(\"Hello World!\")};",
+            "{ Example ex = obj.getName(); }",
     // "{ float dummy() { int a = b; } }",
     })
     public void parseBlockTest(String test) {
@@ -132,6 +133,7 @@ public class ParserTest {
             "int a = b;",
             "(String str = \"Hello World!\";",
             "(String name = \"TEST\";",
+            "(Example name = \"TEST\";",
     })
     public void parseBlockVariablesTest(String test) {
         ArrayList<ParseTree> variableList = new ArrayList<>();

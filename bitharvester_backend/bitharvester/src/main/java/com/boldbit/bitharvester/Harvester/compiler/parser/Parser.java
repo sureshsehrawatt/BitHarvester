@@ -216,6 +216,7 @@ public class Parser {
                     type = classToken;
                 }
             } else {
+                eat(TokenType.CLASS_IDENTIFIER);
                 type = classToken;
             }
         }
@@ -986,6 +987,14 @@ public class Parser {
             Token operator = peekToken();
             eat(peekToken().tokenType);
             expression = UpdateExpressionTree.postfix(expression, operator, getTreeLocation(start));
+        } else if (peek(TokenType.IDENTIFIER)) {
+            if (expression.parseTreeType == ParseTreeType.IDENTIFIER_EXPRESSION) {
+                ClassIdentifierExpressionTree tree = (ClassIdentifierExpressionTree) expression;
+                ClassIdentifierToken type = tree.classIdentifierToken;
+                IdentifierToken name = (IdentifierToken) peekToken();
+                eat(TokenType.IDENTIFIER);
+                return parseVariableDeclaration(null, type, name, start);
+            }
         }
 
         if (!peek(TokenType.SEMI_COLON) && !peek(TokenType.COLON) && !peek(TokenType.CLOSE_PAREN)
