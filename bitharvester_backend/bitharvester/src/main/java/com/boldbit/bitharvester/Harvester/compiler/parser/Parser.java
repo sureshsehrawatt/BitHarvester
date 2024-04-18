@@ -37,7 +37,7 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.MethodCallsListTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodSignatureTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.MethodsListTree;
-import com.boldbit.bitharvester.Harvester.compiler.trees.NoOfMethodCallsListTree;
+import com.boldbit.bitharvester.Harvester.compiler.trees.CallsListTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ObjectDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.PackageDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTree;
@@ -178,7 +178,7 @@ public class Parser {
         eat(TokenType.CLOSE_CURLY);
 
         return new ClassElements(new VariablesListTree(variablesList),
-                new NoOfMethodCallsListTree(methodCallsListTemp),
+                new CallsListTree(methodCallsListTemp),
                 new MethodsListTree(methodsList), null);
     }
 
