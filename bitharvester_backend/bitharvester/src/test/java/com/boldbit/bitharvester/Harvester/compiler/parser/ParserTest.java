@@ -22,7 +22,7 @@ public class ParserTest {
 
     @BeforeEach
     public void setUp() {
-        parser = new Parser(new SourceFile("", ""));
+        parser = new Parser(new SourceFile("", "", ""));
     }
 
     @Timeout(10)
@@ -31,8 +31,8 @@ public class ParserTest {
             "class MyClass {}",
     })
     public void parseProgramTest(String test) {
-        parser = new Parser(new SourceFile("", test));
-        result = parser.parseProgram();
+        parser = new Parser(new SourceFile("", test, ""));
+        result = parser.parseProgram().programTree;
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.PROGRAM, result.parseTreeType, "");
     }
@@ -43,7 +43,7 @@ public class ParserTest {
             "package com.boldbit.bitharvester.Harvester.compiler.rough;"
     })
     public void parsePackageDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parsePackageDeclaration();
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.PACKAGE_DECLARARTION, result.parseTreeType, "");
@@ -57,7 +57,7 @@ public class ParserTest {
             "import static java.lang.Math.*;",
     })
     public void parseImportDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseImportDeclaration();
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.IMPORT_DECLARATION, result.parseTreeType, "");
@@ -71,7 +71,7 @@ public class ParserTest {
     // "class MyClass"
     })
     public void typeDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.typeDeclaration();
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.CLASS_DECLARATION, result.parseTreeType, "");
@@ -89,7 +89,7 @@ public class ParserTest {
     public void parseVariableDeclarationsTest(String test) {
         ClassIdentifierToken classIdentifierToken = new ClassIdentifierToken("Test", null);
         ArrayList<ParseTree> variableList = new ArrayList<>();
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.classOrInterfaceBodyDeclaration(classIdentifierToken, variableList, false);
         // TODO: VARIABLE_DECLARATION -> FIELD_DECLARATION
         assertEquals(ParseTreeType.FIELD_DECLARATION, variableList.get(0).parseTreeType, "");
@@ -104,7 +104,7 @@ public class ParserTest {
     })
     public void parseMethodDeclarationTest(String test) {
         ClassIdentifierToken classIdentifierToken = new ClassIdentifierToken("Test", null);
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.classOrInterfaceBodyDeclaration(classIdentifierToken, null, false);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.METHOD_DECLARATION, result.parseTreeType, "");
@@ -119,7 +119,7 @@ public class ParserTest {
     // "{ float dummy() { int a = b; } }",
     })
     public void parseBlockTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseBlock(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.BLOCK, result.parseTreeType, "");
@@ -137,7 +137,7 @@ public class ParserTest {
     })
     public void parseBlockVariablesTest(String test) {
         ArrayList<ParseTree> variableList = new ArrayList<>();
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
 
         if (parser.peekToken().tokenType == TokenType.OPEN_PAREN) {
             parser.eat(parser.peekToken().tokenType);
@@ -153,7 +153,7 @@ public class ParserTest {
             "try{ int a = b; } catch(Exception e){ int a=c; } finally{ int a=d; }",
     })
     public void parseTryStatementTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseTryStatement(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.TRY_STATEMENT, result.parseTreeType, "");
@@ -168,7 +168,7 @@ public class ParserTest {
     // "int arr[] = {1, 2, 3}",
     })
     public void parseArrayDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.classOrInterfaceBodyDeclaration(null, null, false);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.ARRAY_LITERAL_EXPRESSION, result.parseTreeType, "");
@@ -182,7 +182,7 @@ public class ParserTest {
             "do{ }while(str.length());",
     })
     public void parseDoWhileStatementTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseDoWhileStatement(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.DO_WHILE_STATEMENT, result.parseTreeType, "");
@@ -196,7 +196,7 @@ public class ParserTest {
             "while(str.length()){ }",
     })
     public void parseWhileStatementTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseWhileStatement(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.WHILE_STATEMENT, result.parseTreeType, "");
@@ -217,7 +217,7 @@ public class ParserTest {
             "for(int i : array){}", // Enhanced for loop (for-each loop) over an array
     })
     public void parseForStatementTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseForStatement(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.FOR_STATEMENT, result.parseTreeType, "");
@@ -232,7 +232,7 @@ public class ParserTest {
             "(int a, int b[])",
     })
     public void formalParametersTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         ArrayList<ParseTree> formalParameters = parser.formalParameters();
         assertEquals(ParseTreeType.METHOD_PARAMETER_DECLARATION, formalParameters.get(0).parseTreeType, "");
     }
@@ -246,7 +246,7 @@ public class ParserTest {
             "if(a>b){ a -= b; } else if (a<b){ a += b; } else { a *= b; }",
     })
     public void parseIfStatementTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseIfStatement(null);
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.IF_STATEMENT, result.parseTreeType, "");
@@ -258,7 +258,7 @@ public class ParserTest {
             "(Example(int id, String name){ }",
     })
     public void parseConstructorDeclarationTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         parser.eat(TokenType.OPEN_PAREN);
         ClassIdentifierToken classIdentifierToken = (ClassIdentifierToken) parser.peekToken();
         parser.eat(TokenType.CLASS_IDENTIFIER);
@@ -273,7 +273,7 @@ public class ParserTest {
             "i++, ++j)"
     })
     public void parseExpressionListTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         ArrayList<ParseTree> resultList = parser.parseExpressionList(null);
         assertNotNull(resultList, "Parse tree should not be null");
         assertEquals(ParseTreeType.EXPRESSION, resultList.get(0).parseTreeType, "");
@@ -301,7 +301,7 @@ public class ParserTest {
             "object.method(123);"
     })
     public void parseExpressionTest(String test) {
-        Parser parserEx = new Parser(new SourceFile("", test));
+        Parser parserEx = new Parser(new SourceFile("", test, ""));
         ParseTree resultEx = parserEx.parseExpression(null);
         assertEquals(ParseTreeType.EXPRESSION, resultEx.parseTreeType);
     }
@@ -316,7 +316,7 @@ public class ParserTest {
             "obj.getOrg().getEmployee().sayHello();",
     })
     public void checkIsExpressionContainsMethodCallTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         parser.parseExpression(null);
         // assertEquals(ParseTreeType.EXPRESSION, result.parseTreeType);
     }
@@ -333,7 +333,7 @@ public class ParserTest {
             "(obj.getValue(a))",
     })
     public void parseArgumentsTest(String test) {
-        parser = new Parser(new SourceFile("", test));
+        parser = new Parser(new SourceFile("", test, ""));
         result = parser.parseArguments();
         assertNotNull(result, "Parse tree should not be null");
         assertEquals(ParseTreeType.ARGUMENT_LIST, result.parseTreeType, "");

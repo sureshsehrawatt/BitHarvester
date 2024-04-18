@@ -2,6 +2,8 @@ package com.boldbit.bitharvester.Harvester.compiler.parser;
 
 import java.util.ArrayList;
 
+import com.boldbit.bitharvester.Harvester.compiler.Analyzer.Analyzer;
+import com.boldbit.bitharvester.Harvester.compiler.Analyzer.Program;
 import com.boldbit.bitharvester.Harvester.compiler.lexer.Scanner;
 import com.boldbit.bitharvester.Harvester.compiler.token.ClassIdentifierToken;
 import com.boldbit.bitharvester.Harvester.compiler.token.Comment;
@@ -43,6 +45,7 @@ import com.boldbit.bitharvester.Harvester.compiler.trees.PackageDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParameterDeclarationTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ParseTreeType;
+import com.boldbit.bitharvester.Harvester.compiler.Analyzer.ProgramData;
 import com.boldbit.bitharvester.Harvester.compiler.trees.ProgramTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.TryStatementTree;
 import com.boldbit.bitharvester.Harvester.compiler.trees.UpdateExpressionTree;
@@ -55,13 +58,17 @@ public class Parser {
     Scanner scanner;
     SourcePosition lastSourcePosition;
     CommentRecorder commentRecorder = new CommentRecorder();
+    Analyzer analyzer;
 
     public Parser(SourceFile sourceFile) {
         this.scanner = new Scanner(sourceFile, 0, commentRecorder);
         lastSourcePosition = scanner.getPosition();
+        analyzer = new Analyzer();
+        analyzer.fileName = sourceFile.fileName;
+        analyzer.fileSize = sourceFile.fileSize;
     }
 
-    public ProgramTree parseProgram() {
+    public Program parseProgram() {
         SourcePosition start = lastSourcePosition;
         ArrayList<ParseTree> sourceElements = new ArrayList<>();
 
@@ -84,7 +91,12 @@ public class Parser {
         // FIXME - implement commentRecorder
         // return new ProgramTree(sourceElements, commentRecorder.getComments(),
         // getTreeLocation(start));
-        return new ProgramTree(sourceElements, commentRecorder.getComments(), getTreeLocation(start));
+
+        ProgramTree programTree = new ProgramTree(sourceElements, commentRecorder.getComments(),
+                getTreeLocation(start));
+        ProgramData programData = analyzer.processProgramTree(programTree);
+
+        return new Program(programData, programTree);
     }
 
     public ParseTree typeDeclaration() {
