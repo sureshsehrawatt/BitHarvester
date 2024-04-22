@@ -1,27 +1,63 @@
 import React, { useState } from "react";
 import BitButton from "../../../components/Assets/BitButton";
-import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import axios from "axios";
+import { backendBaseUrl } from "../../../conf/config";
 
 const UploadCode = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+    setFile(e.target.files[0]);
+  };
+
+  const onUpload = async () => {
+    const URL = `${backendBaseUrl}/api/processcode`;
+    try {
+      const formData = new FormData();
+      formData.append("file", file, "Solution.java");
+
+      const config = {
+        headers: {
+          "Content-Type": `multipart/form-data;`,
+        },
+      };
+
+      const response = await axios.post(URL, formData, config);
+      console.log("File uploaded successfully:", response.data);
+
+      // resetForm();
+      // navigate("/bitdashboard");
+      // window.location.reload();
+    } catch (error) {
+      console.error(
+        "Error while signin :",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
     <div className="uploadCode">
       <div className="uploadCodeFirst">
         <div className="uploadCodeFileDropDiv">
-          <form className="uploadCodeFileDrop" onClick={()=>document.querySelector(".codeUpload").click()}>
-            <input type="file" accept=".java, text/plain" className="codeUpload" onChange={handleFileChange} hidden />
+          <form
+            className="uploadCodeFileDrop"
+            onClick={() => document.querySelector(".codeUpload").click()}
+          >
+            <input
+              type="file"
+              accept=".java, text/plain"
+              className="codeUpload"
+              onChange={handleFileChange}
+              hidden
+            />
             <CloudUploadRoundedIcon sx={{ fontSize: 80 }} />
 
-            {selectedFile && (
+            {file && (
               <div>
-                <p>Selected File: {selectedFile.name}</p>
-                <p>File Size: {selectedFile.size} bytes</p>
+                <p>Selected File: {file.name}</p>
+                <p>File Size: {file.size} bytes</p>
               </div>
             )}
           </form>
@@ -37,7 +73,7 @@ const UploadCode = () => {
       </div>
       <div className="uploadCodeButtonDiv">
         <div className="uploadCodeButton">
-          <BitButton label="Upload" />
+          <BitButton label="Upload" onClick={onUpload} />
         </div>
       </div>
     </div>

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserController {
@@ -71,12 +70,10 @@ public class UserController {
         }
     }
 
-
-
     public static String generateUserId() {
         long timestamp = System.currentTimeMillis();
         // int random = new Random().nextInt(1000000);
-        String sessionId = timestamp + "" ;
+        String sessionId = timestamp + "";
         return sessionId;
     }
 

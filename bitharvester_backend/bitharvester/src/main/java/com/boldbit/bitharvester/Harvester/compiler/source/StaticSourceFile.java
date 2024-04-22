@@ -15,6 +15,26 @@ public class StaticSourceFile {
         this.fileSize = getSize(path);
     }
 
+    public StaticSourceFile(String fileName, String sourceString, long fileSize) {
+        this.fileName = fileName;
+        this.sourceString = sourceString;
+        this.fileSize = getSize(fileSize);
+    }
+
+    String getSize(long fileSizeBytes) {
+        String size = "";
+        if (fileSizeBytes >= 1024 * 1024) {
+            // If file size is greater than or equal to 1 MB
+            size = String.format("%.2f MB", (double) fileSizeBytes / (1024 * 1024));
+        } else if (fileSizeBytes >= 1024) {
+            // If file size is greater than or equal to 1 KB
+            size = String.format("%.2f KB", (double) fileSizeBytes / 1024);
+        } else {
+            size = fileSizeBytes + " bytes";
+        }
+        return size;
+    }
+
     String getSize(Path path) {
         String size = "";
         try {

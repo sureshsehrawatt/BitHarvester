@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Runner {
 
-    public static void parse(StaticSourceFile staticSourceFile) {
+    public static String parse(StaticSourceFile staticSourceFile) {
+        String jsonString = null;
         try {
             SourceFile sourceFile = new SourceFile(staticSourceFile.fileName, staticSourceFile.sourceString,
                     staticSourceFile.fileSize);
@@ -20,16 +21,17 @@ public class Runner {
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-            writeJsonToFile("programData", objectMapper.writeValueAsString(program.programData));
+            jsonString = writeJsonToFile("programData", objectMapper.writeValueAsString(program.programData));
             writeJsonToFile("programTree", objectMapper.writeValueAsString(program.programTree));
-            
+
             System.out.println("JSON saved!!!");
         } catch (Exception e) {
             System.out.println("Exception in parsing:- " + e);
         }
+        return jsonString;
     }
 
-    private static void writeJsonToFile(String fileName, String jsonString) {
+    private static String writeJsonToFile(String fileName, String jsonString) {
         String filePath = "bitharvester_backend/bitharvester/src/main/java/com/boldbit/bitharvester/Harvester/compiler/doc/"
                 + fileName + ".json";
         try (FileWriter fileWriter = new FileWriter(filePath)) {
@@ -38,5 +40,6 @@ public class Runner {
         } catch (Exception e) {
             System.out.println("Exception in Json writing:- " + e);
         }
+        return jsonString;
     }
 }
