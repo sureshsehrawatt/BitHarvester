@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import BitButton from "../../../components/Assets/BitButton";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import axios from "axios";
 import { backendBaseUrl } from "../../../conf/config";
+import DataContext from "./DataContext";
+import { useNavigate } from "react-router-dom";
 
 const UploadCode = () => {
   const [file, setFile] = useState(null);
+  const { setDataValue } = useContext(DataContext); // Access context
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -26,9 +30,10 @@ const UploadCode = () => {
       const response = await axios.post(URL, formData, config);
       console.log("File uploaded successfully:", response.data);
 
-      // resetForm();
-      // navigate("/bitdashboard");
-      // window.location.reload();
+      setDataValue(response.data); // Set data in context
+      setFile(null);
+
+      navigate("/bitdashboard/dashboard");
     } catch (error) {
       console.error(
         "Error while signin :",

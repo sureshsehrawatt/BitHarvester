@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useContext } from "react";
+import TreeTable from "../../../rough/TreeTable";
+import DataContext from "./DataContext";
 
 const Dashboard = () => {
-  return (
-    <div>Dashboard</div>
-  )
-}
+  const { data } = useContext(DataContext);
 
-export default Dashboard
+  return (
+    <div>{data != null ? <TreeTable data={data} /> : <p>Welcome!</p>}</div>
+  );
+};
+
+export default Dashboard;

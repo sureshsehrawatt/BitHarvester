@@ -22,7 +22,7 @@ import Settings from "./pages/Dashboard/Tabs/Settings";
 import Dummy from "./components/Demo/Dummy";
 import Profile from "./pages/Dashboard/Tabs/Profile";
 
-const isAuthenticated = !!localStorage.getItem("userId")
+const isAuthenticated = !!localStorage.getItem("userId");
 
 const publicRoutes = [
   { path: "/", element: <Home /> },
