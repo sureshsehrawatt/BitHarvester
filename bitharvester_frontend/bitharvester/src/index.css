@@ -572,6 +572,14 @@ body {
   height: 100%; */
 }
 
+/* *******************************  Dashboard Tab Section  ************************************ */
+
+.dashboardTab {
+  overflow-y: auto;
+  height: 100%;
+  padding-left: 20px;
+}
+
 /* *******************************  BitNavbar Section  ************************************ */
 
 .bitNavbar {

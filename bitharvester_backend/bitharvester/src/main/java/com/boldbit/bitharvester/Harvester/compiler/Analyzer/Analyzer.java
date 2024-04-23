@@ -60,7 +60,7 @@ public class Analyzer {
             i++;
         }
 
-        return new ProgramData(fileName, fileSize, linesCode, packageName, imports, classCount, totalVariables,
+        return new ProgramData(fileName, fileSize, packageName, linesCode, imports, classCount, totalVariables,
                 totalMethods,
                 totalMethodCalls, totalObjectCalls, classes);
     }

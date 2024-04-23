@@ -6,7 +6,9 @@ const Dashboard = () => {
   const { data } = useContext(DataContext);
 
   return (
-    <div>{data != null ? <TreeTable data={data} /> : <p>Welcome!</p>}</div>
+    <div className="dashboardTab">
+      {data != null ? <TreeTable data={data} /> : <p>Welcome!</p>}
+    </div>
   );
 };
 

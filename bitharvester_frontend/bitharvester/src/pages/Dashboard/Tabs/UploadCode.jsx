@@ -19,7 +19,7 @@ const UploadCode = () => {
     const URL = `${backendBaseUrl}/api/processcode`;
     try {
       const formData = new FormData();
-      formData.append("file", file, "Solution.java");
+      formData.append("file", file);
 
       const config = {
         headers: {
