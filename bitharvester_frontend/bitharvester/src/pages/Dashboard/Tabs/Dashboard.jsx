@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import TreeTable from "../../../rough/TreeTable";
+import TreeTable from "./TreeTable";
 import DataContext from "./DataContext";
 
 const Dashboard = () => {

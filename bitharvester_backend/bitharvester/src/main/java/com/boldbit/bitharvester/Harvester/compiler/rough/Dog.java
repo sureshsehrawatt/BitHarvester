@@ -15,7 +15,7 @@ public final class Dog extends Animal {
 
     Dog() {
         a *= 10;
-        obj.getOrg().getEmployee().sayHello();
+        dogObj.getOrg().getEmployee().sayHello();
         speak(5);
     }
 
